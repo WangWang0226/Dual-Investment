@@ -1,0 +1,17 @@
+# 使用 Node.js 基礎映像
+FROM node:18 as builder
+
+# 設定工作目錄
+WORKDIR /app
+
+# 複製專案並安裝依賴
+COPY package*.json ./
+RUN npm install
+
+# 複製其餘檔案並建置
+COPY . .
+RUN npm run build
+
+# 啟動容器
+EXPOSE 4000
+CMD ["npm", "run", "dev"]

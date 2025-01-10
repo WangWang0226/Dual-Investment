@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  foundry:
+    build:
+      context: ./foundry
+      dockerfile: Dockerfile.foundry
+    volumes:
+      - ./foundry:/app
+    command: "forge test"
+    networks:
+      - dual_investment_net
+
+  nextjs:
+    build:
+      context: ./nextjs
+      dockerfile: Dockerfile.nextjs
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./nextjs:/app
+    command: "npm run dev"
+    networks:
+      - dual_investment_net
+
+networks:
+  dual_investment_net:
+    driver: bridge
