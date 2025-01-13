@@ -6,22 +6,8 @@ import "forge-std/console2.sol";
 import "forge-std/Test.sol";
 import "../src/Vault.sol";
 import "../src/util/ERC20.sol";
-import "./MockOracle.sol";
+import "../src/util/MockOracle.sol";
 import "../src/Factory.sol";
-
-
-interface AggregatorV3Interface {
-  function latestRoundData()
-    external
-    view
-    returns (
-      uint80 roundId,
-      int256 answer,
-      uint256 startedAt,
-      uint256 updatedAt,
-      uint80 answeredInRound
-    );
-}
 
 contract VaultTest is Test {
 
@@ -59,7 +45,7 @@ contract VaultTest is Test {
         alice = vm.addr(1);
         bob = vm.addr(2);
 
-        // Give alice and bob enough USDC
+        // Give alice, bob and owner enough USDC
         deal(quoteToken, alice, USER_INIT_WEALTH);
         deal(quoteToken, bob, USER_INIT_WEALTH);
         deal(baseToken, owner, OWNER_INIT_WEALTH_WETH);

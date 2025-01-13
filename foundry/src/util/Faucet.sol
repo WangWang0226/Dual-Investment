@@ -11,7 +11,7 @@ contract Faucet {
     token public token1;
     
     uint constant amount0 = 10e18; //WETH
-    uint constant amount1 = 10000e6; //USDC
+    uint constant amount1 = 1000e6; //USDC
 
     mapping(address => bool) public tokenClaimed;
 
