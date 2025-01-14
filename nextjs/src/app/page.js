@@ -1,94 +1,36 @@
 'use client';
 import { useState, useEffect } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useConnect, useDisconnect, useBalance, useWriteContract, useSimulateContract } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useBalance, useWriteContract, useSimulateContract, useWaitForTransactionReceipt } from "wagmi";
 import { formatUnits } from "ethers";
+import FAUCET_ABI from './abi/faucetAbi.js';
 
 const FAUCET_CONTRACT_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"; // 替換為你的 Faucet 合約地址
-const FAUCET_ABI = [
-	{
-		"inputs": [],
-		"name": "claimToken",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_token0",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_token1",
-				"type": "address"
-			}
-		],
-		"name": "setToken",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "token0",
-		"outputs": [
-			{
-				"internalType": "contract token",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "token1",
-		"outputs": [
-			{
-				"internalType": "contract token",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "tokenClaimed",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
-]
-
 
 const TOKEN0_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // 替換為你的 Token0 地址（WETH）
 const TOKEN1_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // 替換為你的 Token1 地址（USDC）
 
 
 export default function HomePage() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useAccount({
+    onConnect() {
+      console.log("Wallet connected:", address);
+      refetchBalances(); // 錢包連線時更新餘額
+    },
+    onDisconnect() {
+      console.log("Wallet disconnected");
+      setBalanceToken0("0");
+      setBalanceToken1("0");
+    },
+  });
   const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const [balanceToken0, setBalanceToken0] = useState("0");
   const [balanceToken1, setBalanceToken1] = useState("0");
+  const [transactionHash, setTransactionHash] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
 
   const { data } = useSimulateContract({
@@ -97,25 +39,53 @@ export default function HomePage() {
     functionName: "claimToken",
   });
 
-  const { writeContract } = useWriteContract();
+  const { writeContract } = useWriteContract({
+    mutation: {
+      onSuccess(hash) {
+        console.log("Transaction sent:", hash);
+        setTransactionHash(hash); // 儲存交易 Hash
+      },
+    }
+  });
+
+  const result = useWaitForTransactionReceipt({
+    hash: transactionHash,
+  });
+
+  
+  // 提取並同步交易狀態
+  useEffect(() => {
+    if (result) {
+      setIsLoading(result.isLoading);
+      setIsSuccess(result.isSuccess);
+      setIsError(result.isError);
+    }
+  }, [result]);
+
 
   // 獲取 Token0（WETH）的餘額
-  const { data: token0BalanceData } = useBalance({
+  const { data: token0BalanceData, refetch: refetchToken0 } = useBalance({
     address: address,
     token: TOKEN0_ADDRESS,
     watch: true,
   });
 
   // 獲取 Token1（USDC）的餘額
-  const { data: token1BalanceData } = useBalance({
+  const { data: token1BalanceData, refetch: refetchToken1 } = useBalance({
     address: address,
     token: TOKEN1_ADDRESS,
     watch: true,
   });
 
+  // 定義更新餘額的方法
+  const refetchBalances = () => {
+    refetchToken0();
+    refetchToken1();
+  };
+
   // 更新 Token0 餘額
   useEffect(() => {
-    if (token0BalanceData?.value && token0BalanceData?.decimals !== undefined) {
+    if (token0BalanceData?.value !== undefined && token0BalanceData?.decimals !== undefined) {
       setBalanceToken0(formatUnits(token0BalanceData.value, token0BalanceData.decimals));
     } else {
       console.warn("Token0 balance data is incomplete:", token0BalanceData);
@@ -124,7 +94,7 @@ export default function HomePage() {
 
   // 更新 Token1 餘額
   useEffect(() => {
-    if (token1BalanceData?.value && token1BalanceData?.decimals !== undefined) {
+    if (token1BalanceData?.value !== undefined && token1BalanceData?.decimals !== undefined) {
       setBalanceToken1(formatUnits(token1BalanceData.value, token1BalanceData.decimals));
     } else {
       console.warn("Token1 balance data is incomplete:", token0BalanceData);
@@ -151,6 +121,9 @@ export default function HomePage() {
               >
                 Claim Tokens
               </button>
+              {isLoading && <p>Transaction in progress...</p>}
+              {isSuccess && <p>Transaction succeeded!</p>}
+              {isError && <p>Transaction failed.</p>}
             </div>
           </div>
         </div>
