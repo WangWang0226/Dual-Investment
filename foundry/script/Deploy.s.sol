@@ -20,12 +20,10 @@ contract Deploy is Script {
     address public oracle; 
 
     uint256 timestamp = block.timestamp;
-    uint256 strikePrice = 1e18 * 2000e6 / 1e18; // 2000 USDC per WETH
-    uint256 premium = 1e18 * 20e6 / 1e18 ; // 20 USDC per ETH
-    uint256 expiry = timestamp + 1 days; // 1 day
-    uint256 maxUnits = 100 * 1e18;
+    uint BASE = 100;
+    uint INTEREST_RATE = 20;    
 
-    uint immutable OWNER_INIT_WEALTH_WETH = 100000e18;
+    uint immutable OWNER_INIT_WEALTH_PUPU = 100000e18;
     uint immutable OWNER_INIT_WEALTH_USDC = 200000000e6;
 
     function run() external {
@@ -34,8 +32,8 @@ contract Deploy is Script {
 
         vm.startBroadcast(deployerPrivateKey);
 
-        baseToken = address(new ERC20(deployer, "WETHL", "WETHL", 18));
-        quoteToken = address(new ERC20(deployer, "USDL", "USDCL", 6));
+        baseToken = address(new ERC20(deployer, "PUPU", "PUPU", 18));
+        quoteToken = address(new ERC20(deployer, "USDL", "USDL", 6));
     
         oracle = address(new MockOracle(2000e6)); // 1 ETH = 2000 USDC
         faucet = address(new Faucet());
@@ -45,22 +43,21 @@ contract Deploy is Script {
         ERC20(quoteToken).addMinter(faucet);
         
         // Owner mint tokens
-        ERC20(baseToken).mint(deployer, OWNER_INIT_WEALTH_WETH);
+        ERC20(baseToken).mint(deployer, OWNER_INIT_WEALTH_PUPU);
         ERC20(quoteToken).mint(deployer, OWNER_INIT_WEALTH_USDC);
 
-        console.log("WETH deployed at:", baseToken);
+        console.log("PUPU deployed at:", baseToken);
         console.log("USDC deployed at:", quoteToken);
         console.log("Faucet deployed at:", faucet);
         console.log("Factory deployed at:", factory);
         console.log("Oracle deployed at:", oracle);
 
-        // The following should be called from backend
         address vault = Factory(factory).createVault(deployer);
         console.log("vault deployed at:", vault);
 
-        ERC20(quoteToken).approve(vault, type(uint).max);
-        ERC20(baseToken).approve(vault, type(uint).max);
-        Vault(vault).init(baseToken, quoteToken, oracle, expiry, strikePrice, premium, maxUnits);
+        ERC20(quoteToken).transfer(vault, OWNER_INIT_WEALTH_USDC);
+        ERC20(baseToken).transfer(vault, OWNER_INIT_WEALTH_PUPU);
+        Vault(vault).init(baseToken, quoteToken, oracle, BASE, INTEREST_RATE);
 
         console.log("Deploy script successfully completed");
         vm.stopBroadcast();
