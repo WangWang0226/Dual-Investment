@@ -6,7 +6,6 @@ services:
       dockerfile: Dockerfile.foundry
     volumes:
       - ./foundry:/app
-    command: "forge test"
     networks:
       - dual_investment_net
 
@@ -18,7 +17,6 @@ services:
       - "4000:4000"
     volumes:
       - ./nextjs:/app
-    command: "npm run dev"
     networks:
       - dual_investment_net
 

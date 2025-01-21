@@ -6,6 +6,10 @@ COPY . .
 
 # 安裝依賴與編譯
 RUN forge build
+RUN forge test
 
-# 測試容器啟動指令
-CMD ["forge", "test"]
+# 開放 Anvil 默認端口
+EXPOSE 8545
+
+# 啟動 Anvil 並執行腳本
+ENTRYPOINT ["sh", "-c", "anvil & sleep 3 && forge script script/deploy.s.sol --rpc-url http://127.0.0.1:8545 --broadcast"]
