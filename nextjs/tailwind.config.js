@@ -13,8 +13,6 @@ export default {
         deepBlue: '#38538d'
       },
       backgroundImage: {
-        'wallpaper': "url('/bg-photo.jpeg')",
-        'wallpaper2': "url('/bg-photo2.jpeg')",
         'wallpaper3': "url('/bg-photo3.jpeg')",
         'projectIcon': "url('/projectIcon.jpeg')",
       }

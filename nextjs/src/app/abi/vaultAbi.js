@@ -14,25 +14,6 @@ const VAULT_ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "premium",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "maxUnits",
-				"type": "uint256"
-			}
-		],
-		"name": "AdjustOption",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "user",
@@ -41,7 +22,25 @@ const VAULT_ABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "cashAmount",
+				"name": "positionId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "investUnits",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "strikePrice",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "expiry",
 				"type": "uint256"
 			}
 		],
@@ -50,12 +49,6 @@ const VAULT_ABI = [
 	},
 	{
 		"anonymous": false,
-		"inputs": [],
-		"name": "ExerciseOption",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": true,
@@ -66,24 +59,37 @@ const VAULT_ABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "baseTokenAmount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "quoteTokenAmount",
+				"name": "positionId",
 				"type": "uint256"
 			}
 		],
-		"name": "Withdraw",
+		"name": "SettleAndWithdraw",
 		"type": "event"
 	},
 	{
 		"inputs": [],
-		"name": "adminWithdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "BASE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "INTEREST_RATE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -129,16 +135,33 @@ const VAULT_ABI = [
 				"internalType": "uint256",
 				"name": "cashAmount",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "expiry",
+				"type": "uint256"
 			}
 		],
 		"name": "deposit",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "positionId",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "expiry",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "expiryOf",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -163,13 +186,90 @@ const VAULT_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "finalTotalUnits",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getAllPositions",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "investUnits",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "strikePrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expiry",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct Vault.Position[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "positionId",
+				"type": "uint256"
+			}
+		],
+		"name": "getPosition",
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "id",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "investUnits",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "strikePrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "expiry",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isActive",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -194,22 +294,12 @@ const VAULT_ABI = [
 			},
 			{
 				"internalType": "uint256",
-				"name": "_expiry",
+				"name": "_BASE",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "_strikePrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_premium",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_maxUnits",
+				"name": "_INTEREST_RATE",
 				"type": "uint256"
 			}
 		],
@@ -252,19 +342,6 @@ const VAULT_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "maxUnits",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "oracle",
 		"outputs": [
 			{
@@ -291,19 +368,6 @@ const VAULT_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "premium",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "quoteToken",
 		"outputs": [
 			{
@@ -316,42 +380,27 @@ const VAULT_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "settle",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "positionId",
+				"type": "uint256"
+			}
+		],
+		"name": "settleAndWithdraw",
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "baseTokenAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quoteTokenAmount",
 				"type": "uint256"
 			}
 		],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "state",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "strikePrice",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -368,20 +417,77 @@ const VAULT_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "withdraw",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "userPositionIds",
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "baseTokenAmount",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "userPositions",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "quoteTokenAmount",
+				"name": "investUnits",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "strikePrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "expiry",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isActive",
+				"type": "bool"
 			}
 		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawRemainingFunds",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}

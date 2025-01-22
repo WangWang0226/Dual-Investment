@@ -3,13 +3,26 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #083d65;
   --foreground: #171717;
+  --primary: #fbbf24;
+  --secondary: #3965a2;
+  --deepBlue: #38538d;
+  --lightBlue: #629ae9;
+  --lightOrange: #e6a754;
+  --lightGreen: #59e069;
+  --lightRed: #ec4f4f;
+  --lightYellow: #f3e441;
+  --lightPink: #e49adc;
+  --lightPurple: #dd6be0;
+  --lightBrown: #e69c52;
+  --lightGrey: #d6d6d6;
+  --textDisabled: #a1a1a1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: var(--deepBlue);
     --foreground: #ededed;
   }
 }
@@ -17,5 +30,342 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Jersey 15';
+}
+
+/* 移除上下箭頭 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.background {
+  position: absolute;
+  /* 确保背景图片在文字后面 */
+  background-attachment: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  filter: blur(8px);
+  /* 调整模糊程度 */
+  z-index: -1;
+  transition: filter 0.7s ease;
+  /* 平滑过渡 */
+}
+
+.button-wallet {
+  background-color: var(--lightBlue);
+  color: white;
+  /* text-white */
+  padding: 0.75rem 1.5rem;
+  /* px-6 py-3 */
+  border-radius: 12px;
+  transition: background-color 0.3s;
+  /* 添加过渡效果 */
+}
+
+.button-wallet:hover {
+  background-color: #4a87db;
+  /* hover:bg-yellow-600 */
+}
+
+.token-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  border-radius: 100%;
+}
+
+.token-name {
+  margin-left: 8px;
+  color: white;
+  font-size: 28px;
+}
+
+.content-primary {
+  font-size: 20px;
+}
+
+.title-primary {
+  font-size: 64px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--lightBlue);
+  padding: 16px 24px;
+  border-radius: 12px;
+  color: #ccc;
+  min-height: 4rem;
+}
+
+.input-field {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 28px;
+  outline: none;
+}
+
+.input-field::placeholder {
+  color: var(--lightGrey);
+}
+
+.gradient-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 20px;
+  text-align: center;
+  color: white;
+  background: linear-gradient(90deg, #4cb0f7, #2ed7b3);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.gradient-button:disabled {
+  background: var(--lightGrey);
+  color: #a1a1a1;
+  border: 1px solid var(--lightgrey);
+  cursor: not-allowed;
+}
+
+.navbarContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 4rem;
+  flex: 1;
+  min-height: 72px;
+  gap: 2rem;
+}
+
+.navbarSubContainer {
+  display: flex;
+  /* 使用 Flexbox */
+  justify-content: flex-end;
+  /* 将子元素推到右侧 */
+  align-items: center;
+  margin-right: 4rem;
+  flex: 1;
+  min-height: 72px;
+  gap: 2rem;
+}
+
+/* 基本样式 */
+.navbar {
+  position: fixed;
+  /* 固定在顶部 */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  /* 确保在其他元素之上 */
+  background-color: var(--secondary);
+}
+
+.vaultStatusContainer {
+  border-radius: 12px;
+  border: 2px solid var(--lightBlue);
+  width: 100%;
+  padding: 24px;
+}
+
+.tabs-container {
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  background-color: var(--lightBlue);
+  color: var(--lightGrey);
+  /* 默認文字顏色 */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.tab.active {
+  background-color: #86d9ff;
+  /* 選中時的背景色 */
+  color: #ffffff;
+  /* 選中時的文字顏色 */
+}
+
+.notifications {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.notification-container {
+  background-color: var(--lightBlue);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  min-width: 300px;
+  font-size: 16px;
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.close-btn {
+  margin-left: auto;
+  /* 將按鈕推到右側 */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #ff6961;
+}
+
+.diagram-container {
+  display: flex;
+  min-height: 310px;
+  background: #13296b;
+  position: relative;
+  border-radius: 12px;
+}
+
+.line-chart-container {
+  flex: 1.5;
+  position: relative;
+  z-index: 2;
+}
+
+.invest-point {
+  position: absolute;
+  left: 130px;
+  top: 100px;
+  color: #6ad1e3;
+  display: flex;
+  max-width: 240px;
+  align-items: center;
+}
+
+.invest-point-now {
+  position: absolute;
+  left: 170px;
+  top: 90%;
+  color: #6ad1e3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.interest-rate {
+  position: absolute;
+  left: 230px;
+  top: 220px;
+  color: #fff;
+}
+
+.right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.redeem-section {
+  flex: 1;
+  background: #377f67;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 20px;
+  border-top-right-radius: 12px;
+}
+
+.current-price-section {
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  top: 42%;
+  width: 100%;
+}
+
+.loss-section {
+  position: relative;
+  flex: 1;
+  background: #885f58;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 20px;
+  border-bottom-right-radius: 12px;
+}
+
+.maturity-text {
+  position: absolute;
+  top: 80%;
+  left: 20px;
+  color: var(--lightGrey);
+}
+
+.horizontal-line {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  border-top: 1px dashed #ffffff;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.playground-left-container {
+  display: flex;
+  flex: 3;
+  flex-grow: 3;
+  background-color: var(--secondary);
+  border-radius: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.playground-right-container {
+  display: flex;
+  flex-direction: column;
+  flex: 4;
+  flex-grow: 4;
+  justify-content: center;
+  padding: 24px;
+  gap: 16px;
 }
