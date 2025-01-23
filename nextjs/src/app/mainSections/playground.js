@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useAccount, useConnect, useDisconnect, useBalance, useWriteContract, useReadContract, useSimulateContract, useWaitForTransactionReceipt } from "wagmi";
+import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
+import { useBalance, useReadContract, useSimulateContract } from "wagmi";
 import { formatUnits } from "ethers";
 import FAUCET_ABI from '../abi/faucetAbi.js';
 import VAULT_ABI from '../abi/vaultAbi.js';
 import ERC20_ABI from '../abi/ERC20Abi.js';
-import Notification from "../components/notification.js";
 import DualInvestmentDiagram from '../components/dualInvestmentDiagram.js';
 
 
@@ -15,30 +14,19 @@ const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
 const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
 const VAULT_ADDRESS = process.env.NEXT_PUBLIC_VAULT_ADDRESS
 
-export default function Playground({ userAddr, isConnected, refetchBalances }) {
-
-    const [lastResult, setLastResult] = useState({}); // 儲存上一次的結果內容
-    const [notifications, setNotifications] = useState([]);
+export default forwardRef(function Playground({ userAddr, isConnected, writeContract, lastestResult }, ref) {
     const [vaultBalanceToken0, setVaultBalanceToken0] = useState("0");
     const [vaultBalanceToken1, setVaultBalanceToken1] = useState("0");
-
-    const [transactionHash, setTransactionHash] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [isError, setIsError] = useState(false);
     const [cashAmount, setCashAmount] = useState("");
-
     const [selectedDuration, setSelectedDuration] = useState("45s");
 
-    // 添加通知
-    const addNotification = (message) => {
-        setNotifications((prev) => [...prev, { id: Date.now(), message }]);
-    };
-
-    // 移除通知
-    const removeNotification = (id) => {
-        setNotifications((prev) => prev.filter((notification) => notification.id !== id));
-    };
+    
+    // 定義可以由父元件呼叫的方法
+    useImperativeHandle(ref, () => ({
+        onWalletConnect() {
+            checkClaimed()
+        },
+    }));
 
     const depositDurations = [
         { label: "30s", value: "30" },
@@ -63,19 +51,6 @@ export default function Playground({ userAddr, isConnected, refetchBalances }) {
         ],
     });
 
-    const { writeContract } = useWriteContract({
-        mutation: {
-            onSuccess(hash) {
-                console.log("Transaction sent:", hash);
-                setTransactionHash(hash); // 儲存交易 Hash
-            },
-        }
-    });
-
-    const result = useWaitForTransactionReceipt({
-        hash: transactionHash,
-    });
-
     // Handle user input change
     const handleInputChange = (event) => {
         setCashAmount(event.target.value);
@@ -90,9 +65,6 @@ export default function Playground({ userAddr, isConnected, refetchBalances }) {
         const currentTimestamp = Math.floor(Date.now() / 1000); // 當前時間戳（秒）
         const expiryTimestamp = currentTimestamp + Number(selectedValue);
 
-        console.log("Current Timestamp:", currentTimestamp);
-        console.log("Expiry Timestamp:", expiryTimestamp);
-
         writeContract({
             address: VAULT_ADDRESS,
             abi: VAULT_ABI,
@@ -105,7 +77,7 @@ export default function Playground({ userAddr, isConnected, refetchBalances }) {
         });
     };
 
-    const { data: hasClaimed } = useReadContract({
+    const { data: isClaimed, refetch: checkClaimed } = useReadContract({
         address: FAUCET_CONTRACT_ADDRESS,
         abi: FAUCET_ABI,
         functionName: "tokenClaimed",
@@ -113,27 +85,13 @@ export default function Playground({ userAddr, isConnected, refetchBalances }) {
         enabled: Boolean(userAddr), // 僅在地址存在時啟用
     });
 
-    // 提取並同步交易狀態
+    // tx on success listener
     useEffect(() => {
-        const isDifferent =
-            result.isLoading !== lastResult.isLoading ||
-            result.isSuccess !== lastResult.isSuccess ||
-            result.isError !== lastResult.isError;
-        if (isDifferent) {
-            setLastResult(result); // 更新最新結果
-
-            if (result.isLoading) {
-                addNotification("Transaction is loading...");
-            } else if (result.isSuccess) {
-                refetchBalances()
-                refetchVaultBalances()
-                addNotification("Transaction successful!");
-            } else if (result.isError) {
-                addNotification("Transaction failed!");
-            }
+        if (lastestResult.isSuccess) {
+            refetchVaultBalances()
+            checkClaimed()
         }
-
-    }, [result]);
+    }, [lastestResult]);
 
     // 獲取 Vault Token0（PUPU）的餘額
     const { data: vaultToken0BalanceData, refetch: refetchVaultToken0 } = useBalance({
@@ -149,7 +107,6 @@ export default function Playground({ userAddr, isConnected, refetchBalances }) {
         watch: true,
     });
 
-    // 定義更新餘額的方法
     const refetchVaultBalances = () => {
         refetchVaultToken0();
         refetchVaultToken1();
@@ -174,16 +131,16 @@ export default function Playground({ userAddr, isConnected, refetchBalances }) {
     }, [vaultToken1BalanceData]);
 
     return (
-        <div className='h-screen flex flex-row pb-20 pt-24 max-w-7xl mx-auto'>
+        <div className='playground-container'>
             <div className='playground-left-container'>
                 {isConnected ? (
                     <div className='flex flex-col gap-8 w-3/4 content-primary'>
                         <button
                             className='gradient-button'
-                            disabled={!Boolean(claimTokenData?.request) || hasClaimed}
+                            disabled={!Boolean(claimTokenData?.request) || isClaimed}
                             onClick={() => writeContract(claimTokenData.request)}
                         >
-                            {hasClaimed ? "Claimed Successfully!" : "Claim Your USDL"}
+                            {isClaimed ? "Claimed Successfully!" : "Claim Your USDL"}
                         </button>
 
                         <div className='input-container'>
@@ -236,35 +193,25 @@ export default function Playground({ userAddr, isConnected, refetchBalances }) {
 
             <div className='playground-right-container'>
                 <div className='flex flex-row justify-center items-center'>
-                    <div className='flex flex-2 flex-col p-8 '>
-                        <h1 className='text-4xl'>- How to Play -</h1>
-                        <h2 className='text-2xl'>
-                            Step 1: Claim USDL to play.
-                            <br />Step 2: Deposit your amount.
-                            <br />Step 3: Wait for maturity.
-                            <br />Step 4: Redeem rewards!
+                    <div className='flex flex-2 flex-col p-4 '>
+                        <h1 className='h1'>- How to Play -</h1>
+                        <h2 className='h2'>
+                            Step 1. Claim USDL to play.
+                            <br />Step 2. Deposit your amount.
+                            <br />Step 3. Wait for maturity.
+                            <br />Step 4. Redeem rewards!
                         </h2>
                     </div>
                     <div className='vaultStatusContainer flex-1'>
-                        <p className='text-2xl'> Current PUPU Price: 1022</p>
                         <p className='text-2xl'> Interest Rate: 10%</p>
-                        <h1 className='text-2xl'>Vault Status:</h1>
-                        <p className='text-xl'> - PUPU Balance: {vaultBalanceToken0}
-                            <br /> - USDL Balance: {vaultBalanceToken1}
+                        <h1 className='text-2xl'>Vault Balances:</h1>
+                        <p className='text-xl'> - PUPU: {vaultBalanceToken0}
+                            <br /> - USDL: {vaultBalanceToken1}
                         </p>
                     </div>
                 </div>
                 <DualInvestmentDiagram />
             </div>
-            <div className="notifications">
-                {notifications.map((notification) => (
-                    <Notification
-                        key={notification.id}
-                        message={notification.message}
-                        onClose={() => removeNotification(notification.id)}
-                    />
-                ))}
-            </div>
         </div>
     )
-}
+})

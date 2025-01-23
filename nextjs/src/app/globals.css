@@ -60,9 +60,9 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: var(--lightBlue);
   color: white;
   /* text-white */
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   /* px-6 py-3 */
-  border-radius: 12px;
+  border-radius: 96px;
   transition: background-color 0.3s;
   /* 添加过渡效果 */
 }
@@ -89,8 +89,18 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 20px;
 }
 
+.h1 {
+  font-size: 36px;
+}
+
+.h2 {
+  font-size: 24px;
+}
+
 .title-primary {
   font-size: 64px;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
+
 }
 
 .input-container {
@@ -102,6 +112,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 12px;
   color: #ccc;
   min-height: 4rem;
+  width: fit-content;
 }
 
 .input-field {
@@ -118,6 +129,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .gradient-button {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
   display: block;
   width: 100%;
   padding: 12px;
@@ -141,6 +153,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #a1a1a1;
   border: 1px solid var(--lightgrey);
   cursor: not-allowed;
+  text-shadow: none;
 }
 
 .navbarContainer {
@@ -148,7 +161,7 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: center;
   margin-right: 4rem;
   flex: 1;
-  min-height: 72px;
+  min-height: 64px;
   gap: 2rem;
 }
 
@@ -160,7 +173,6 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: center;
   margin-right: 4rem;
   flex: 1;
-  min-height: 72px;
   gap: 2rem;
 }
 
@@ -172,8 +184,7 @@ input[type="number"]::-webkit-outer-spin-button {
   left: 0;
   right: 0;
   z-index: 1000;
-  /* 确保在其他元素之上 */
-  background-color: var(--secondary);
+  background: linear-gradient(30deg, #4cb0f7, var(--secondary));
 }
 
 .vaultStatusContainer {
@@ -198,15 +209,13 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 20px;
   background-color: var(--lightBlue);
   color: var(--lightGrey);
-  /* 默認文字顏色 */
   transition: background-color 0.3s, color 0.3s;
 }
 
 .tab.active {
   background-color: #86d9ff;
-  /* 選中時的背景色 */
   color: #ffffff;
-  /* 選中時的文字顏色 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
 }
 
 .notifications {
@@ -268,8 +277,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .invest-point {
   position: absolute;
-  left: 130px;
-  top: 100px;
+  left: 140px;
+  top: 120px;
   color: #6ad1e3;
   display: flex;
   max-width: 240px;
@@ -350,6 +359,17 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 1;
 }
 
+
+.playground-container {
+  height: 90vh;
+  display: flex;
+  max-width: 80rem;
+  margin-left: auto; 
+  margin-right: auto;
+  justify-content: center;
+  align-items: center;
+}
+
 .playground-left-container {
   display: flex;
   flex: 3;
@@ -358,6 +378,8 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 12px;
   justify-content: center;
   align-items: center;
+  height: fit-content;
+  padding: 96px 0px;
 }
 
 .playground-right-container {
@@ -366,6 +388,67 @@ input[type="number"]::-webkit-outer-spin-button {
   flex: 4;
   flex-grow: 4;
   justify-content: center;
-  padding: 24px;
+  padding: 0px 24px;
   gap: 16px;
 }
+
+.user-position-container {
+  height: 100vh; /* h-screen */
+    display: flex; /* flex */
+    flex-direction: column;
+    margin-bottom: 5rem; /* pb-20 */
+    margin-left: auto; /* mx-auto */
+    margin-right: auto; /* mx-auto */
+    border-radius: 12px;
+    max-width: 80rem; /* max-w-7xl (80rem) */
+    padding-top: 5rem;
+    justify-content: center;
+}
+
+.grid-container {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(500px, 1fr)); /* 自適應列寬，最小 300px，最大填滿 */
+  gap: 32px;
+  margin-top: 1rem;
+  padding: 24px;
+}
+
+.position-card {
+  background: linear-gradient(135deg, #1F2937
+  , #2C3E50); /* 從淡灰到深藍 */
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.position-card h3 {
+  margin: 0 0 8px;
+}
+
+.position-card p {
+  margin: 4px 0;
+}
+
+.price-simulator-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 48px;
+}
+
+.redeem-button {
+  position: absolute;
+  bottom: 15%;
+  right: 5%;
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+
+.redeem-button.active {
+  background: linear-gradient(135deg, #4cb0f7, var(--secondary));
+}
+

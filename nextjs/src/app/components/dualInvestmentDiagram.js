@@ -42,7 +42,7 @@ export default function DualInvestmentDiagram() {
         </svg>
         {/* 標記點和 Invest 文本 */}
         <div className="invest-point">
-          <p>Invest 2000 USDL which equals to 2 units based on current price</p>
+          <p>Invest 2000 USDL</p>
           {/* <img src="/USDL.jpeg" alt="USDL" className="ml-2 token-icon" /> */}
         </div>
         <div className="invest-point-now">

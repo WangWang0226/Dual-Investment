@@ -7,7 +7,7 @@ export default function Notification({ message, onClose }) {
         // 設置定時器，5 秒後自動關閉
         const timer = setTimeout(() => {
           onClose();
-        }, 5000);
+        }, 4000);
     
         // 清除定時器，避免內存洩漏
         return () => clearTimeout(timer);

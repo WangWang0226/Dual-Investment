@@ -9,7 +9,6 @@ export default function Home() {
         const handleScroll = () => {
             const scrollY = window.scrollY; 
             const newBlur = Math.max(0, 8 - (scrollY / 100 * 8)); 
-            console.log('scroll y:', scrollY)
             setBlur(newBlur);
         };
 

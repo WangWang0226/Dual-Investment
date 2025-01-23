@@ -1,22 +1,38 @@
 'use client';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAccount, useConnect, useDisconnect, useBalance, useWriteContract, useSimulateContract, useWaitForTransactionReceipt } from "wagmi";
 import { formatUnits } from "ethers";
 import Navbar from './mainSections/navbar.js';
 import Home from './mainSections/home.js';
 import Playground from './mainSections/playground.js';
+import UserPositions from './mainSections/userPositions.js';
+import Notification from "./components/notification.js";
+import PriceSimulator from "./components/priceSimulator.js";
+
 
 const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
 const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
 
 export default function HomePage() {
+  const [transactionHash, setTransactionHash] = useState(null);
   const [balanceToken0, setBalanceToken0] = useState("0");
   const [balanceToken1, setBalanceToken1] = useState("0");
+  const [notifications, setNotifications] = useState([]);
+  const [lastResult, setLastResult] = useState({}); // 儲存上一次的結果內容
+
+  const playgroundRef = useRef();
+  const userPositionRef = useRef();
 
   const { address, isConnected } = useAccount({
     onConnect() {
       console.log("Wallet connected:", address);
-      refetchBalances(); // 錢包連線時更新餘額
+      refetchBalances();
+      if (playgroundRef.current) {
+        playgroundRef.current.onWalletConnect();
+      }
+      if (userPositionRef.current) {
+        userPositionRef.current.onWalletConnect();
+      }
     },
     onDisconnect() {
       console.log("Wallet disconnected");
@@ -24,6 +40,49 @@ export default function HomePage() {
       setBalanceToken1("0");
     },
   });
+
+  const { writeContract } = useWriteContract({
+    mutation: {
+      onSuccess(hash) {
+        console.log("Transaction sent:", hash);
+        setTransactionHash(hash); // 儲存交易 Hash
+      },
+    }
+  });
+
+  const txResult = useWaitForTransactionReceipt({
+    hash: transactionHash,
+  });
+
+  // 提取並同步交易狀態
+  useEffect(() => {
+    const isResultUpdated =
+      txResult.isLoading !== lastResult.isLoading ||
+      txResult.isSuccess !== lastResult.isSuccess ||
+      txResult.isError !== lastResult.isError;
+    if (isResultUpdated) {
+      setLastResult(txResult);
+      if (txResult.isLoading) {
+        addNotification("Transaction is loading...");
+      } else if (txResult.isSuccess) {
+        refetchBalances()
+        addNotification("Transaction successful!");
+      } else if (txResult.isError) {
+        addNotification("Transaction failed!");
+      }
+    }
+
+  }, [txResult]);
+
+  // 添加通知
+  const addNotification = (message) => {
+    setNotifications((prev) => [...prev, { id: Date.now(), message }]);
+  };
+
+  // 移除通知
+  const removeNotification = (id) => {
+    setNotifications((prev) => prev.filter((notification) => notification.id !== id));
+  };
 
   // 獲取 Token0（PUPU）的餘額
   const { data: token0BalanceData, refetch: refetchToken0 } = useBalance({
@@ -63,12 +122,25 @@ export default function HomePage() {
     }
   }, [token1BalanceData]);
 
+
+
   return (
     <div>
       <Navbar balanceToken0={balanceToken0} balanceToken1={balanceToken1} />
       <Home />
-      <Playground userAddr={address} isConnected={isConnected} refetchBalances={refetchBalances}/>
-    
+      <PriceSimulator/>
+      <Playground userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={playgroundRef} />
+      <UserPositions userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={userPositionRef} />
+      
+      <div className="notifications">
+        {notifications.map((notification) => (
+          <Notification
+            key={notification.id}
+            message={notification.message}
+            onClose={() => removeNotification(notification.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
