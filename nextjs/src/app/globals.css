@@ -16,7 +16,7 @@
   --lightPink: #e49adc;
   --lightPurple: #dd6be0;
   --lightBrown: #e69c52;
-  --lightGrey: #d6d6d6;
+  --lightGray: #d6d6d6;
   --textDisabled: #a1a1a1;
 }
 
@@ -125,10 +125,10 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .input-field::placeholder {
-  color: var(--lightGrey);
+  color: var(--lightGray);
 }
 
-.gradient-button {
+.playground-button {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
   display: block;
   width: 100%;
@@ -143,15 +143,15 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.gradient-button:hover {
+.playground-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.gradient-button:disabled {
-  background: var(--lightGrey);
+.playground-button:disabled {
+  background: var(--lightGray);
   color: #a1a1a1;
-  border: 1px solid var(--lightgrey);
+  border: 1px solid var(--lightgray);
   cursor: not-allowed;
   text-shadow: none;
 }
@@ -163,6 +163,14 @@ input[type="number"]::-webkit-outer-spin-button {
   flex: 1;
   min-height: 64px;
   gap: 2rem;
+}
+
+.navbarContainer-wallet-disconnect{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 4rem;
+  min-height: 64px;
 }
 
 .navbarSubContainer {
@@ -208,7 +216,7 @@ input[type="number"]::-webkit-outer-spin-button {
   cursor: pointer;
   font-size: 20px;
   background-color: var(--lightBlue);
-  color: var(--lightGrey);
+  color: var(--lightGray);
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -347,7 +355,7 @@ input[type="number"]::-webkit-outer-spin-button {
   position: absolute;
   top: 80%;
   left: 20px;
-  color: var(--lightGrey);
+  color: var(--lightGray);
 }
 
 .horizontal-line {
@@ -401,8 +409,6 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-right: auto; /* mx-auto */
     border-radius: 12px;
     max-width: 80rem; /* max-w-7xl (80rem) */
-    padding-top: 5rem;
-    justify-content: center;
 }
 
 .grid-container {
@@ -415,6 +421,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .position-card {
+  position: relative;
   background: linear-gradient(135deg, #1F2937
   , #2C3E50); /* 從淡灰到深藍 */
   color: #ffffff;
@@ -422,6 +429,22 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
+}
+
+.position-card-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background: gray;
+  opacity: 80%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  font-size: 96px;
+  color: #2C3E50;
 }
 
 .position-card h3 {
@@ -446,9 +469,46 @@ input[type="number"]::-webkit-outer-spin-button {
   right: 5%;
   padding: 8px 16px;
   border-radius: 12px;
+  background: var(--lightGray);
+  color: #a1a1a1;
+  cursor: not-allowed;
 }
 
 .redeem-button.active {
-  background: linear-gradient(135deg, #4cb0f7, var(--secondary));
+  background: linear-gradient(90deg, #4cb0f7, #2ed7b3);
+  color: white;
+  cursor: pointer;
 }
 
+.redeem-button.active:hover {
+  background: linear-gradient(90deg, #189efd, #11cba3);
+}
+
+.status-point {
+  border-radius: 100%;
+  width: 12px;
+  height: 12px;
+  transition: background-color 0.3s ease;
+  background-color: var(--status-color);
+}
+
+.status-text {
+  font-size: 20px;
+  transition: color 0.3s ease;
+  color: var(--status-color);
+}
+
+.status-point.ACTIVE_PENDING,
+.status-text.ACTIVE_PENDING {
+  --status-color: var(--lightBrown);
+}
+
+.status-point.ACTIVE_REDEEMABLE,
+.status-text.ACTIVE_REDEEMABLE {
+  --status-color: #5cb85c;
+}
+
+.status-point.CLAIMED,
+.status-text.CLAIMED {
+  --status-color: var(--lightGray);
+}

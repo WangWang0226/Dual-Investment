@@ -2,6 +2,9 @@
 
 import React from "react";
 
+const INTEREST_RATE = Number(process.env.NEXT_PUBLIC_INTEREST_RATE)*100
+
+
 export default function DualInvestmentDiagram() {
   return (
     <div className="diagram-container">
@@ -51,7 +54,7 @@ export default function DualInvestmentDiagram() {
         
         {/* Premium 文本 */}
         <div className="interest-rate">
-          <p>10% Interest Rate</p>
+          <p>{INTEREST_RATE}% Interest Rate</p>
         </div>
       </div>
 
@@ -62,7 +65,7 @@ export default function DualInvestmentDiagram() {
           <div>
             <p>
               Redeem 2200 USDL<br/>
-              2000 x (1+10%)
+              2000 x (1+{INTEREST_RATE}%)
             </p>
           </div>
         </div>
@@ -77,7 +80,7 @@ export default function DualInvestmentDiagram() {
           <div>
             <p>
               Redeem 2.2 PUPU<br/>
-              2 x (1+10%)
+              2 x (1+{INTEREST_RATE}%)
             </p>
           </div>
           <p className="maturity-text">Maturity</p>

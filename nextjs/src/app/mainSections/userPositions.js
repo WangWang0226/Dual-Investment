@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import { useReadContract } from "wagmi";
-import { formatUnits } from "ethers";
 import VAULT_ABI from '../abi/vaultAbi.js';
 import ERC20_ABI from '../abi/ERC20Abi.js';
 import PositionCard from "../components/positionCard.js";
@@ -12,7 +11,7 @@ const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
 const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
 const VAULT_ADDRESS = process.env.NEXT_PUBLIC_VAULT_ADDRESS
 
-export default forwardRef(function UserPositions({ userAddr, isConnected, writeContract, lastestResult }, ref) {
+export default forwardRef(function UserPositions({ userAddr, isConnected, writeContract, lastestResult, latestPrice }, ref) {
     const [positions, setPositions] = useState([]);
 
     // 定義可以由父元件呼叫的方法
@@ -32,14 +31,7 @@ export default forwardRef(function UserPositions({ userAddr, isConnected, writeC
     useEffect(() => {
         if (positionData != undefined) {
             console.log("positions:", positionData)
-            const formattedPositions = positionData.map(({ id, investUnits, expiry, strikePrice, isActive }) => ({
-                id,
-                investUnits: formatUnits(investUnits, 18), 
-                expiry: new Date(Number(expiry) * 1000).toISOString(), 
-                strikePrice: formatUnits(strikePrice, 6),
-                isActive,
-            }));
-            setPositions(formattedPositions)
+            setPositions(positionData)
         }
     }, [positionData])
 
@@ -59,7 +51,7 @@ export default forwardRef(function UserPositions({ userAddr, isConnected, writeC
                     {positions.length > 0 ? (
                         <div className="grid-container">
                             {positions.map((position, index) => (
-                                <PositionCard key={index} position={position} />
+                                <PositionCard key={index} position={position} latestPrice={latestPrice} writeContract={writeContract}/>
                             ))}
                         </div>
                     ) : (

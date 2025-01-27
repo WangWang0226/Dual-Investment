@@ -7,21 +7,20 @@ import FAUCET_ABI from '../abi/faucetAbi.js';
 import VAULT_ABI from '../abi/vaultAbi.js';
 import ERC20_ABI from '../abi/ERC20Abi.js';
 import DualInvestmentDiagram from '../components/dualInvestmentDiagram.js';
-
+import { setOraclePrice } from '../api.js';
 
 const FAUCET_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_CONTRACT_ADDRESS;
 const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
 const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
 const VAULT_ADDRESS = process.env.NEXT_PUBLIC_VAULT_ADDRESS
+const INTEREST_RATE = Number(process.env.NEXT_PUBLIC_INTEREST_RATE)*100
 
-export default forwardRef(function Playground({ userAddr, isConnected, writeContract, lastestResult }, ref) {
+export default forwardRef(function Playground({ userAddr, isConnected, writeContract, lastestResult, latestPrice }, ref) {
     const [vaultBalanceToken0, setVaultBalanceToken0] = useState("0");
     const [vaultBalanceToken1, setVaultBalanceToken1] = useState("0");
     const [cashAmount, setCashAmount] = useState("");
     const [selectedDuration, setSelectedDuration] = useState("45s");
 
-    
-    // 定義可以由父元件呼叫的方法
     useImperativeHandle(ref, () => ({
         onWalletConnect() {
             checkClaimed()
@@ -59,7 +58,9 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
 
     const isAmountValid = cashAmount && parseFloat(cashAmount) > 0; // 驗證金額是否有效
 
-    const handleDeposit = () => {
+    const handleDeposit = async () => {
+
+        await setOraclePrice(latestPrice);
         const selectedValue = depositDurations.find((duration) => duration.label === selectedDuration)?.value;
 
         const currentTimestamp = Math.floor(Date.now() / 1000); // 當前時間戳（秒）
@@ -136,7 +137,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                 {isConnected ? (
                     <div className='flex flex-col gap-8 w-3/4 content-primary'>
                         <button
-                            className='gradient-button'
+                            className='playground-button'
                             disabled={!Boolean(claimTokenData?.request) || isClaimed}
                             onClick={() => writeContract(claimTokenData.request)}
                         >
@@ -169,7 +170,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                         </div>
 
                         <button
-                            className='gradient-button'
+                            className='playground-button'
                             disabled={!isAmountValid || !Boolean(approveDepositData?.request)} // 新增驗證條件
                             onClick={() => writeContract(approveDepositData.request)}
                         >
@@ -177,7 +178,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                         </button>
 
                         <button
-                            className='gradient-button'
+                            className='playground-button'
                             disabled={!isAmountValid || !selectedDuration} // 新增驗證條件
                             onClick={handleDeposit}
                         >
@@ -203,7 +204,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                         </h2>
                     </div>
                     <div className='vaultStatusContainer flex-1'>
-                        <p className='text-2xl'> Interest Rate: 10%</p>
+                        <p className='text-2xl'> Interest Rate: {INTEREST_RATE}%</p>
                         <h1 className='text-2xl'>Vault Balances:</h1>
                         <p className='text-xl'> - PUPU: {vaultBalanceToken0}
                             <br /> - USDL: {vaultBalanceToken1}

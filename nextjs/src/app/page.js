@@ -7,7 +7,7 @@ import Home from './mainSections/home.js';
 import Playground from './mainSections/playground.js';
 import UserPositions from './mainSections/userPositions.js';
 import Notification from "./components/notification.js";
-import PriceSimulator from "./components/priceSimulator.js";
+import PriceBanner from "./components/priceBanner.js";
 
 
 const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
@@ -19,6 +19,7 @@ export default function HomePage() {
   const [balanceToken1, setBalanceToken1] = useState("0");
   const [notifications, setNotifications] = useState([]);
   const [lastResult, setLastResult] = useState({}); // 儲存上一次的結果內容
+  const [latestPrice, setPrice] = useState(1000); // 初始化價格
 
   const playgroundRef = useRef();
   const userPositionRef = useRef();
@@ -123,15 +124,31 @@ export default function HomePage() {
   }, [token1BalanceData]);
 
 
+  useEffect(() => {
+    const simulatePriceChange = () => {
+      const randomChange = (Math.random() - 0.5) * 10; // 每次價格波動範圍為 ±5
+      setPrice((prevPrice) => {
+        let newPrice = prevPrice + randomChange;
+        if (newPrice > 1050) newPrice = 1050;
+        if (newPrice < 950) newPrice = 950;
+
+        return newPrice;
+      });
+    };
+
+    const interval = setInterval(simulatePriceChange, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
 
   return (
     <div>
       <Navbar balanceToken0={balanceToken0} balanceToken1={balanceToken1} />
       <Home />
-      <PriceSimulator/>
-      <Playground userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={playgroundRef} />
-      <UserPositions userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={userPositionRef} />
-      
+      <PriceBanner price={latestPrice}/>
+      <Playground userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={playgroundRef} latestPrice={latestPrice}/>
+      <UserPositions userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={userPositionRef} latestPrice={latestPrice}/>
+
       <div className="notifications">
         {notifications.map((notification) => (
           <Notification

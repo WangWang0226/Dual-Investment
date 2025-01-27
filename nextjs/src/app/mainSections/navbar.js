@@ -54,7 +54,7 @@ export default function Navbar({ balanceToken0, balanceToken1 }) {
                                     </div>
                                 </div>
                             ) : (
-                                <div className='navbarSubContainer'>
+                                <div className='navbarContainer-wallet-disconnect'>
                                     <button className='button-wallet' onClick={() => openConnectModal()}>Connect Wallet</button>
                                 </div>
                             )}
