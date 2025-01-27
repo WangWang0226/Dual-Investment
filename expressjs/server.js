@@ -7,19 +7,19 @@ const cors = require('cors');
 const { anvil } = require('viem/chains');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 // 配置 CORS
 app.use(cors({
-    origin: process.env.ALLOWED_ORIGIN, // 允許的來源
-    methods: ['GET', 'POST'],        // 允許的 HTTP 方法
-    allowedHeaders: ['Content-Type', 'Authorization'], // 允許的自訂標頭
+    origin: "*", 
+    methods: ['GET', 'POST'],       
+    allowedHeaders: ['Content-Type', 'Authorization'], 
 }));
 
-// 使用 JSON body parser
+app.options('*', cors());
+
 app.use(express.json());
 
-// 配置 Viem Wallet Client
 const walletClient = createWalletClient({
     chain: anvil,
     transport: http(process.env.RPC_URL), 
