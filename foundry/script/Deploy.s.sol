@@ -21,10 +21,11 @@ contract Deploy is Script {
 
     uint256 timestamp = block.timestamp;
     uint BASE = 100;
-    uint INTEREST_RATE = 20;    
+    uint INTEREST_RATE = 10;    
 
     uint immutable OWNER_INIT_WEALTH_PUPU = 100000e18;
     uint immutable OWNER_INIT_WEALTH_USDC = 200000000e6;
+    int initialPrice = 1000e6;
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
@@ -35,7 +36,7 @@ contract Deploy is Script {
         baseToken = address(new ERC20(deployer, "PUPU", "PUPU", 18));
         quoteToken = address(new ERC20(deployer, "USDL", "USDL", 6));
     
-        oracle = address(new MockOracle(2000e6)); // 1 ETH = 2000 USDC
+        oracle = address(new MockOracle(initialPrice, deployer)); 
         faucet = address(new Faucet());
         factory = address(new Factory(deployer));
         Faucet(faucet).setToken(baseToken, quoteToken);
