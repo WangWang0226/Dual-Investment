@@ -4,10 +4,12 @@ const { createWalletClient, http } = require('viem');
 const { privateKeyToAccount } = require('viem/accounts');
 const cors = require('cors');
 
-const { anvil } = require('viem/chains');
+const { anvil, sepolia } = require('viem/chains');
 
 const app = express();
 const PORT = process.env.PORT;
+const selectedChain = process.env.NODE_ENV === 'production' ? sepolia : anvil;
+
 
 // 配置 CORS
 app.use(cors({
@@ -21,7 +23,7 @@ app.options('*', cors());
 app.use(express.json());
 
 const walletClient = createWalletClient({
-    chain: anvil,
+    chain: selectedChain,
     transport: http(process.env.RPC_URL), 
     account: privateKeyToAccount(process.env.OWNER_PRIVATE_KEY), 
 });
