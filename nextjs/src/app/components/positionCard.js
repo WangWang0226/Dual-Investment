@@ -79,7 +79,7 @@ export default function PositionCard({ position, latestPrice, writeContract }) {
 
   const TokenReceive = () => {
     const isUSDL = isReceiveUSDL;
-    const receiveAmount = isUSDL ? investCashAmount * (1 + INTEREST_RATE) : (investUnits * (1 + INTEREST_RATE)).toFixed(5);
+    const receiveAmount = isUSDL ? (investCashAmount * (1 + INTEREST_RATE)).toFixed(2) : (investUnits * (1 + INTEREST_RATE)).toFixed(5);
     const tokenType = isUSDL ? "USDL" : "PUPU Coin";
     const tokenImage = isUSDL ? "/USDL.jpeg" : "/PUPU.jpeg";
     const priceComparisonText = isUSDL
@@ -97,11 +97,9 @@ export default function PositionCard({ position, latestPrice, writeContract }) {
           </p>
         </div>
       ) : status === Status.ACTIVE_PENDING ? (
-        <div className="text-xl text-gray-300">
-          <h1> Not expired yet</h1>
-        </div>
+        <div></div>
       ) : (
-        <div className="text-xl text-gray-300">
+        <div className="text-3xl text-gray-300">
           <h1> Redeemed {receiveAmount} {tokenType} successfully !</h1>
         </div>
       )
@@ -123,7 +121,7 @@ export default function PositionCard({ position, latestPrice, writeContract }) {
             className={`status-point ${status}`}
           />
           <span className={`status-text ${status}`}>
-            {status === Status.ACTIVE_PENDING && <p>Not Expired Yet...</p>}
+            {status === Status.ACTIVE_PENDING && <p>Waiting for Maturity...</p>}
             {status === Status.ACTIVE_REDEEMABLE && <p>Redeemable!</p>}
             {status === Status.CLAIMED && <p>Redeemed!</p>}
           </span>

@@ -12,6 +12,7 @@ export default function DualInvestmentDiagram() {
 
       {/* 左側折線圖區域 */}
       <div className="line-chart-container">
+      <span className='text-xl absolute top-0 left-0 p-4'>Dual Investment Mechanism Explanation</span>
         {/* 折線圖 */}
         <svg width="100%" height="100%">
           {/* 圓滑折線圖 */}

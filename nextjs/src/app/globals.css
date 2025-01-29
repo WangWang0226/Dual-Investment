@@ -87,7 +87,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .token-icon {
   width: 28px;
   height: 28px;
-  margin-right: 8px;
+  margin: 0px 8px;
   border-radius: 100%;
 }
 
@@ -287,6 +287,7 @@ input[type="number"]::-webkit-outer-spin-button {
   background: #13296b;
   position: relative;
   border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .line-chart-container {
@@ -394,12 +395,14 @@ input[type="number"]::-webkit-outer-spin-button {
   display: flex;
   flex: 3;
   flex-grow: 3;
-  background-color: var(--secondary);
+  background: linear-gradient(180deg, #3983b9, var(--secondary));
+
   border-radius: 12px;
   justify-content: center;
   align-items: center;
   height: fit-content;
-  padding: 96px 0px;
+  padding: 64px 0px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .playground-right-container {
@@ -472,7 +475,8 @@ input[type="number"]::-webkit-outer-spin-button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 48px;
+  padding: 48px 0px;
+
 }
 
 .redeem-button {
@@ -523,4 +527,66 @@ input[type="number"]::-webkit-outer-spin-button {
 .status-point.CLAIMED,
 .status-text.CLAIMED {
   --status-color: var(--lightGray);
+}
+
+.return-info-card {
+  background-color: #1f2937;
+  border-radius: 12px;
+  padding: 12px 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+}
+
+.return-info-card-title {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  color: #9ca3af;
+}
+
+.return-info-condition {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  position: relative;
+  padding-left: 20px; /* 為垂直線留出空間 */
+}
+
+.return-info-condition .label {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.return-info-condition.green .label {
+  color: #4ade80;
+}
+
+.return-info-condition.red .label {
+  color: #f87171;
+}
+
+.return-info-condition .value {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.return-info-condition::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 2px;
+}
+
+.return-info-condition.green::before {
+  background-color: #4ade80; /* 綠色 */
+}
+
+.return-info-condition.red::before {
+  background-color: #f87171; /* 紅色 */
 }

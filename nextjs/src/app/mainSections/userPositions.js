@@ -55,7 +55,7 @@ export default forwardRef(function UserPositions({ userAddr, isConnected, writeC
                             ))}
                         </div>
                     ) : (
-                        <p>No positions found for this wallet.</p>
+                        <span className='text-3xl'>No positions found for this wallet.</span>
                     )}
                 </div>
             ) : (<div className='text-4xl font-bold'> Please connect your wallet</div>
