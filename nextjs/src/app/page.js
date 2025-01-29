@@ -88,15 +88,13 @@ export default function HomePage() {
   // 獲取 Token0（PUPU）的餘額
   const { data: token0BalanceData, refetch: refetchToken0 } = useBalance({
     address: address,
-    token: TOKEN0_ADDRESS,
-    watch: true,
+    token: TOKEN0_ADDRESS
   });
 
   // 獲取 Token1（USDC）的餘額
   const { data: token1BalanceData, refetch: refetchToken1 } = useBalance({
     address: address,
-    token: TOKEN1_ADDRESS,
-    watch: true,
+    token: TOKEN1_ADDRESS
   });
 
   // 定義更新餘額的方法

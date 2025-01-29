@@ -48,8 +48,8 @@ export default function Navbar({ balanceToken0, balanceToken1 }) {
                                             icon="./ETH.jpeg"
                                             tokenName="ETH"
                                             balance={parseFloat(account.balanceFormatted).toFixed()}
-                                        />
-                                        <p className='content-primary'>Chain: {chain.name}</p>
+                                        />                                        
+                                        <button className='button-wallet' onClick={openChainModal}>Chain: {chain.name}</button>
                                         <button className='button-wallet' onClick={openAccountModal}>{account.displayName}</button>
                                     </div>
                                 </div>

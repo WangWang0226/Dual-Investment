@@ -12,6 +12,7 @@ import { sepolia, anvil } from 'viem/chains'
 import { injected } from '@wagmi/connectors'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const SEPOLIA_RPC_URL = process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL
 const jersey = Jersey_15({
   weight: '400', 
   subsets: ['latin'], 
@@ -20,14 +21,15 @@ const jersey = Jersey_15({
 
 const queryClient = new QueryClient();
 
-const chains = [anvil, sepolia]
+const chains = [sepolia, anvil]
 const config = createConfig({
-  chains: [anvil, sepolia],
+  chains: chains,
   connectors: [injected()],
   transports: {
+    [sepolia.id]: http(SEPOLIA_RPC_URL),
     [anvil.id]: http('http://127.0.0.1:8545'),
-    [sepolia.id]: http('https://sepolia.example.com'),
   },
+  pollingInterval: 4_000, 
 })
 
 export default function RootLayout({ children }) {
