@@ -28,6 +28,8 @@ const walletClient = createWalletClient({
     account: privateKeyToAccount(process.env.OWNER_PRIVATE_KEY), 
 });
 
+app.get("/", (req, res) => res.send("Express running on Vercel!!"));
+
 app.post('/api/callContract', async (req, res) => {
     try {
         const { contractAddress, abi, functionName, args } = req.body;
@@ -58,8 +60,13 @@ app.post('/api/callContract', async (req, res) => {
     }
 });
 
+
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on ${PORT}`);
 });
+
+module.exports = app;
+
+
 
