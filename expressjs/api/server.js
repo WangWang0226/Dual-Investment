@@ -28,7 +28,11 @@ const walletClient = createWalletClient({
     account: privateKeyToAccount(process.env.OWNER_PRIVATE_KEY), 
 });
 
-app.get("/api", (req, res) => res.send("Express running on Vercel!!"));
+app.get("/api/hello", (req, res) => {
+    res.json({
+        message: "Express running on Vercel!!"
+    })
+});
 
 app.post('/api/callContract', async (req, res) => {
     try {
