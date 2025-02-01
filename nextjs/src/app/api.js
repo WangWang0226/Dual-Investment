@@ -34,16 +34,24 @@ export const callContract = async ({ contractAddress, abi, functionName, args })
 
 
 export const setOraclePrice = async (latestPrice) => {
-    const result = await callContract({
-        contractAddress: ORACLE_ADDRESS,
-        abi: ORACLE_ABI,
-        functionName: "setCurrentPrice",
-        args: [(Math.round(latestPrice * 10 ** 6))],
-    });
+    try {
+        const result = await callContract({
+            contractAddress: ORACLE_ADDRESS,
+            abi: ORACLE_ABI,
+            functionName: "setCurrentPrice",
+            args: [Math.round(latestPrice * 10 ** 6)],
+        });
 
-    if (result.success) {
-        console.log('Set Oracle Price succeed. Tx hash:', result.txHash);
-    } else {
-        console.error('Set Oracle Price Error:', result.error);
+        if (result.success) {
+            console.log('Set Oracle Price succeeded. Tx hash:', result.txHash);
+            return result; 
+        } else {
+            console.error('Set Oracle Price Error:', result.error);
+            throw new Error(result.error || "Unknown error occurred."); 
+        }
+    } catch (error) {
+        console.error('Unexpected error in setOraclePrice:', error);
+        throw error; 
     }
 };
+

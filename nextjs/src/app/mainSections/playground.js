@@ -66,22 +66,29 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
 
     const handleDeposit = async () => {
 
-        await setOraclePrice(latestPrice);
-        const selectedValue = depositDurations.find((duration) => duration.label === selectedDuration)?.value;
+        try {
+            const setPriceResult = await setOraclePrice(latestPrice);
+            console.log("Oracle price set successfully:", setPriceResult.txHash);
 
-        const currentTimestamp = Math.floor(Date.now() / 1000); 
-        const expiryTimestamp = currentTimestamp + Number(selectedValue);
+            const selectedValue = depositDurations.find((duration) => duration.label === selectedDuration)?.value;
 
-        writeContract({
-            address: VAULT_ADDRESS,
-            abi: VAULT_ABI,
-            functionName: "deposit",
-            args: [
-                userAddr,
-                cashAmount ? BigInt(cashAmount * 10 ** 6) : BigInt(0), 
-                expiryTimestamp,
-            ],
-        });
+            const currentTimestamp = Math.floor(Date.now() / 1000);
+            const expiryTimestamp = currentTimestamp + Number(selectedValue);
+
+            writeContract({
+                address: VAULT_ADDRESS,
+                abi: VAULT_ABI,
+                functionName: "deposit",
+                args: [
+                    userAddr,
+                    cashAmount ? BigInt(cashAmount * 10 ** 6) : BigInt(0),
+                    expiryTimestamp,
+                ],
+            });
+            console.log("Deposit successful!");
+        } catch (error) {
+            console.error("Error during deposit:", error);
+        }
     };
 
     const { data: isClaimed, refetch: checkClaimed } = useReadContract({
@@ -215,9 +222,9 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                             <button
                                 className='playground-button'
                                 disabled={!isAmountValid} // 新增驗證條件
-                                onClick={() => {
+                                onClick={ async () => {
                                     if (allowanceEnough) {
-                                        handleDeposit();
+                                        await handleDeposit();
                                     } else {
                                         writeContract(approveDepositData.request);
                                     }
