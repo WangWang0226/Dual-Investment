@@ -10,7 +10,7 @@
         "use": "@vercel/node"
       }
     ],
-    "routes": [
+    "rewrites": [
       { "source": "/api/(.*)", "destination": "/expressjs/api/server.js" },
       { "source": "/(.*)", "destination": "/nextjs/$1" }
     ]
