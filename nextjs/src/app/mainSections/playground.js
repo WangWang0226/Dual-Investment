@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 import { useBalance, useReadContract, useSimulateContract } from "wagmi";
 import { formatUnits } from "ethers";
@@ -24,7 +23,6 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
     const [vaultBalanceToken1, setVaultBalanceToken1] = useState("0");
     const [cashAmount, setCashAmount] = useState("");
     const [selectedDuration, setSelectedDuration] = useState("45s");
-    const [copied, setCopied] = useState(null);
     const [allowanceEnough, setAllowanceEnough] = useState(false);
 
 
@@ -160,20 +158,6 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
         }
     }, [vaultToken1BalanceData]);
 
-    const addresses = {
-        USDL: TOKEN1_ADDRESS,
-        PUPU: TOKEN0_ADDRESS,
-    };
-
-    const handleCopy = (address, key) => {
-        navigator.clipboard.writeText(address);
-        setCopied(key);
-        setTimeout(() => setCopied(null), 2000); // 2 秒後恢復按鈕狀態
-    };
-
-    const truncateAddress = (address) =>
-        `${address.slice(0, 5)}...${address.slice(-5)}`;
-
     return (
         <div className='playground-container'>
             <PriceBanner price={latestPrice} />
@@ -255,23 +239,6 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                         <div className='vaultStatusContainer flex-1'>
 
                             <h1 className='text-2xl'> Interest Rate: {INTEREST_RATE}%</h1>
-                            {Object.entries(addresses).map(([key, address]) => (
-                                <div key={key} className="flex items-center">
-                                    <span className="text-2xl">{key} : {truncateAddress(address)}</span>
-                                    <button
-                                        onClick={() => handleCopy(address, key)}
-                                        className="ml-3 px-3 py-1 hover:bg-blue-400 transition rounded-full"
-                                    >
-                                        {copied === key ? (
-                                            <CheckIcon className="w-5 h-5" />
-                                        ) : (
-                                            <ClipboardIcon className="w-5 h-5" />
-                                        )}
-                                    </button>
-
-                                </div>
-                            ))}
-
                             <h1 className='text-2xl'>Pool Balances:</h1>
                             <p className='text-xl'> - PUPU: {vaultBalanceToken0}
                                 <br /> - USDL: {vaultBalanceToken1}
