@@ -29,7 +29,7 @@
 
 body {
   color: white;
-  background: var(--background);
+  background: var(--deepBlue);
   font-family: 'Jersey 15';
 }
 
@@ -103,7 +103,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .h1 {
   font-size: 36px;
-  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+  /* 增加黑色陰影 */
 }
 
 .h2 {
@@ -112,7 +113,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .title-primary {
   font-size: 64px;
-  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+  /* 增加黑色陰影 */
 }
 
 .input-container {
@@ -133,7 +135,8 @@ input[type="number"]::-webkit-outer-spin-button {
   color: white;
   font-size: 28px;
   outline: none;
-  min-width: 0; /* 防止 input 超出容器寬度 */
+  min-width: 0;
+  /* 防止 input 超出容器寬度 */
 }
 
 .input-field::placeholder {
@@ -141,7 +144,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .playground-button {
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  /* 增加黑色陰影 */
   display: block;
   width: 100%;
   padding: 12px;
@@ -177,7 +181,7 @@ input[type="number"]::-webkit-outer-spin-button {
   gap: 2rem;
 }
 
-.navbarContainer-wallet-disconnect{
+.navbarContainer-wallet-disconnect {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -235,7 +239,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .tab.active {
   background-color: #86d9ff;
   color: #ffffff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  /* 增加黑色陰影 */
 }
 
 .notifications {
@@ -381,16 +386,14 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 1;
 }
 
-
 .playground-container {
   height: 100%;
-  width: 80vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  margin-left: auto; 
-  margin-right: auto;
+  justify-content: center;
   align-items: center;
-  padding: 0px 24px;
+  padding: 0px 72px;
 }
 
 .playground-sub-container {
@@ -399,15 +402,22 @@ input[type="number"]::-webkit-outer-spin-button {
   width: 100%;
   align-items: flex-start;
   justify-content: center;
-  flex-wrap: wrap; /* 允許子元素換行 */
-  justify-content: space-between; /* 讓子元素保持間距 */
+  flex-wrap: wrap;
+  /* 允許子元素換行 */
+  justify-content: space-between;
+  /* 讓子元素保持間距 */
   padding: 24px 0px;
 }
 
-.playground-sub-left-container, .playground-sub-right-container, .explanation-sub-container  {
-  flex: 1 1 45%; /* 每個區塊默認佔 45% 寬度 */
-  box-sizing: border-box; /* 確保 padding 不影響寬度計算 */
+.playground-sub-left-container,
+.playground-sub-right-container,
+.explanation-sub-container {
+  flex: 1 1 45%;
+  /* 每個區塊默認佔 45% 寬度 */
+  box-sizing: border-box;
+  /* 確保 padding 不影響寬度計算 */
 }
+
 .playground-sub-left-container {
   display: flex;
   justify-content: center;
@@ -420,7 +430,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 12px;
   justify-content: center;
   align-items: center;
-  padding: 0px 12px;  
+  padding: 0px 12px;
   margin: 0px 24px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
@@ -435,27 +445,35 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 @media (max-width: 768px) {
-  .playground-sub-left-container, .playground-sub-right-container, .explanation-sub-container {
-    flex: 1 1; 
+
+  .playground-sub-left-container,
+  .playground-sub-right-container,
+  .explanation-sub-container {
+    flex: 1 1;
   }
 }
 
 .user-position-container {
-  height: 100%; /* h-screen */
-    display: flex; /* flex */
-    flex-direction: column;
-    margin-bottom: 5rem; /* pb-20 */
-    margin-left: auto; /* mx-auto */
-    margin-right: auto; /* mx-auto */
-    border-radius: 12px;
-    padding: 0px 24px;
-    max-width: 80rem; /* max-w-7xl (80rem) */
+  height: 100%;
+  /* h-screen */
+  display: flex;
+  /* flex */
+  flex-direction: column;
+  margin-bottom: 5rem;
+  /* pb-20 */
+  border-radius: 12px;
+  padding: 0px 36px;
+  width: 100%;
+  /* max-w-7xl (80rem) */
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .grid-container {
+  width: 100%;
   flex-grow: 1;
   display: grid;
-  grid-template-columns: repeat(2, minmax(500px, 1fr)); /* 自適應列寬，最小 300px，最大填滿 */
+  grid-template-columns: repeat(2, minmax(500px, 1fr));
   gap: 32px;
   margin-top: 1rem;
   padding: 24px;
@@ -463,8 +481,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .position-card {
   position: relative;
-  background: linear-gradient(135deg, #1F2937
-  , #2C3E50); /* 從淡灰到深藍 */
+  background: linear-gradient(135deg, #1F2937, #2C3E50);
+  /* 從淡灰到深藍 */
   color: #ffffff;
   border-radius: 8px;
   padding: 16px;
@@ -576,7 +594,8 @@ input[type="number"]::-webkit-outer-spin-button {
   flex-direction: column;
   margin-bottom: 16px;
   position: relative;
-  padding-left: 20px; /* 為垂直線留出空間 */
+  padding-left: 20px;
+  /* 為垂直線留出空間 */
 }
 
 .return-info-condition .label {
@@ -608,11 +627,13 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .return-info-condition.green::before {
-  background-color: #4ade80; /* 綠色 */
+  background-color: #4ade80;
+  /* 綠色 */
 }
 
 .return-info-condition.red::before {
-  background-color: #f87171; /* 紅色 */
+  background-color: #f87171;
+  /* 紅色 */
 }
 
 .explanation-container {
@@ -621,9 +642,10 @@ input[type="number"]::-webkit-outer-spin-button {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: 0 auto; 
+  margin: 0 auto;
   padding-right: 48px;
-  flex-wrap: wrap; /* 允許子元素換行 */
+  flex-wrap: wrap;
+  /* 允許子元素換行 */
 }
 
 .explanation-sub-container {
@@ -669,4 +691,16 @@ input[type="number"]::-webkit-outer-spin-button {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   color: #00bcd4;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background: var(--deepBlue);
+}
+
+.render-page-container {
+  background: var(--deepBlue);
+  width: 100%;
 }

@@ -58,13 +58,13 @@ export default function Explanation() {
             <div className='explanation-sub-container'>
                 <h1 className='h1'> For example,</h1>
                 <p className='content-primary'>
-                    you invest 2,000 USDL at a 10% interest rate with a current price of 1,000 PUPU/USDL. At maturity, two outcomes are possible:
+                    you invest 2,000 USDL at a 10% interest rate with a current price of 1,000 PUPU/USDL, then $1000 is your strike price. At maturity, two outcomes are possible:
                     <br />
                     1. PUPU Price Above 1,000:
                     You redeem 2,200 USDL (2,000 × 1.10), earning a higher return in stablecoin.
                     <br />
                     2. PUPU Price Below 1,000:
-                    Your investment is converted to 2.2 PUPU (2,000 ÷ 1,000 × 1.10), letting you accumulate more PUPU.
+                    Your investment is converted to 2.2 PUPU (2,000 / 1,000 × 1.10), letting you accumulate more PUPU.
                     <br />
                 </p>
                 <DualInvestmentDiagram />

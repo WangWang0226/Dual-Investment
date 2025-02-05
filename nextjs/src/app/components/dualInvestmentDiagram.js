@@ -51,11 +51,6 @@ export default function DualInvestmentDiagram() {
         <div className="invest-point-now">
           <p>Now</p>
         </div>
-        
-        {/* Premium 文本 */}
-        <div className="interest-rate">
-          <p>{INTEREST_RATE}% Interest Rate</p>
-        </div>
       </div>
 
       {/* 右側收益與損失區域 */}

@@ -3,12 +3,10 @@
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import { useReadContract } from "wagmi";
 import VAULT_ABI from '../abi/vaultAbi.js';
-import ERC20_ABI from '../abi/ERC20Abi.js';
 import PositionCard from "../components/positionCard.js";
+import PriceBanner from "../components/priceBanner.js";
 
 
-const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
-const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
 const VAULT_ADDRESS = process.env.NEXT_PUBLIC_VAULT_ADDRESS
 
 export default forwardRef(function UserPositions({ userAddr, isConnected, writeContract, lastestResult, latestPrice }, ref) {
@@ -45,13 +43,16 @@ export default forwardRef(function UserPositions({ userAddr, isConnected, writeC
 
     return (
         <div className='user-position-container'>
-            <h1 className='title-primary'> Your Positions</h1>
+            <div className='flex flex-row items-center justify-between w-full'>
+                <h1 className='title-primary pl-8'> Your Positions</h1>
+                <h1 className='h1 pr-8'> PUPU Price: {latestPrice.toFixed(2)}</h1>
+            </div>
             {isConnected ? (
-                <div className='overflow-y-auto'>
+                <div className='overflow-y-auto w-full'>
                     {positions.length > 0 ? (
                         <div className="grid-container">
                             {positions.map((position, index) => (
-                                <PositionCard key={index} position={position} latestPrice={latestPrice} writeContract={writeContract}/>
+                                <PositionCard key={index} position={position} latestPrice={latestPrice} writeContract={writeContract} />
                             ))}
                         </div>
                     ) : (

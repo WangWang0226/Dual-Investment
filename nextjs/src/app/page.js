@@ -163,9 +163,9 @@ export default function HomePage() {
     <div>
       <Navbar balanceToken0={balanceToken0} balanceToken1={balanceToken1} />
       <Home />
-      <div className="flex flex-row h-screen items-stretch">
+      <div className="main-container">
         <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} data-aos="fade-up"/>
-        <div data-aos="fade-up" className="pt-8 pb-8">{renderPage()}</div>
+        <div data-aos="fade-up" className="pt-8 pb-8 render-page-container">{renderPage()}</div>
       </div>
       <div className="notifications">
         {notifications.map((notification) => (

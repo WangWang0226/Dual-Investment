@@ -99,8 +99,8 @@ export default function PositionCard({ position, latestPrice, writeContract }) {
       ) : status === Status.ACTIVE_PENDING ? (
         <div></div>
       ) : (
-        <div className="text-3xl text-gray-300">
-          <h1> Redeemed {receiveAmount} {tokenType} successfully !</h1>
+        <div>
+          
         </div>
       )
 
