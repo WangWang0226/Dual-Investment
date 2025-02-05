@@ -28,7 +28,7 @@
 }
 
 body {
-  color: var(--foreground);
+  color: white;
   background: var(--background);
   font-family: 'Jersey 15';
 }
@@ -103,6 +103,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .h1 {
   font-size: 36px;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
 }
 
 .h2 {
@@ -112,7 +113,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .title-primary {
   font-size: 64px;
   text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7); /* 增加黑色陰影 */
-
 }
 
 .input-container {
@@ -124,16 +124,16 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 12px;
   color: #ccc;
   min-height: 4rem;
-  width: fit-content;
+  width: 100%;
 }
 
 .input-field {
-  flex-grow: 1;
   background: transparent;
   border: none;
   color: white;
   font-size: 28px;
   outline: none;
+  min-width: 0; /* 防止 input 超出容器寬度 */
 }
 
 .input-field::placeholder {
@@ -216,7 +216,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .tabs-container {
   display: flex;
-  gap: 24px;
+  gap: 8px;
   justify-content: space-between;
 }
 
@@ -288,6 +288,7 @@ input[type="number"]::-webkit-outer-spin-button {
   position: relative;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 12px 0px;
 }
 
 .line-chart-container {
@@ -382,37 +383,61 @@ input[type="number"]::-webkit-outer-spin-button {
 
 
 .playground-container {
-  height: 90vh;
+  height: 100%;
+  width: 80vw;
   display: flex;
-  max-width: 80rem;
+  flex-direction: column;
   margin-left: auto; 
   margin-right: auto;
-  justify-content: center;
   align-items: center;
+  padding: 0px 24px;
 }
 
-.playground-left-container {
+.playground-sub-container {
   display: flex;
-  flex: 3;
-  flex-grow: 3;
-  background: linear-gradient(180deg, #3983b9, var(--secondary));
+  flex-direction: row;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap; /* 允許子元素換行 */
+  justify-content: space-between; /* 讓子元素保持間距 */
+  padding: 24px 0px;
+}
 
+.playground-sub-left-container, .playground-sub-right-container, .explanation-sub-container  {
+  flex: 1 1 45%; /* 每個區塊默認佔 45% 寬度 */
+  box-sizing: border-box; /* 確保 padding 不影響寬度計算 */
+}
+.playground-sub-left-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.invest-container {
+  display: flex;
+  background: linear-gradient(180deg, #3983b9, var(--secondary));
   border-radius: 12px;
   justify-content: center;
   align-items: center;
-  height: fit-content;
-  padding: 64px 0px;
+  padding: 0px 12px;  
+  margin: 0px 24px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  height: 100%;
 }
 
-.playground-right-container {
+.playground-sub-right-container {
   display: flex;
   flex-direction: column;
-  flex: 4;
-  flex-grow: 4;
-  justify-content: center;
   padding: 0px 24px;
   gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .playground-sub-left-container, .playground-sub-right-container, .explanation-sub-container {
+    flex: 1 1; 
+  }
 }
 
 .user-position-container {
@@ -423,6 +448,7 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-left: auto; /* mx-auto */
     margin-right: auto; /* mx-auto */
     border-radius: 12px;
+    padding: 0px 24px;
     max-width: 80rem; /* max-w-7xl (80rem) */
 }
 
@@ -472,11 +498,9 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .price-simulator-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 48px 0px;
-
 }
 
 .redeem-button {
@@ -589,4 +613,60 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .return-info-condition.red::before {
   background-color: #f87171; /* 紅色 */
+}
+
+.explanation-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; 
+  padding-right: 48px;
+  flex-wrap: wrap; /* 允許子元素換行 */
+}
+
+.explanation-sub-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: left;
+  height: 100%;
+  padding: 0px 24px;
+}
+
+.sidebar {
+  min-width: 200px;
+  height: 100%;
+  color: white;
+  padding-top: 24px;
+  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
+}
+
+.sidebar ul {
+  padding-top: 48px;
+}
+
+.sidebar li {
+  color: white;
+  font-size: 24px;
+  transition: color 0.3s;
+  background: linear-gradient(90deg, #4c6aac, var(--deepBlue));
+  padding: 4px 12px;
+  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
+}
+
+.sidebar li:hover {
+  color: #00bcd4;
+  cursor: pointer;
+  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar li.active {
+  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #00bcd4;
 }

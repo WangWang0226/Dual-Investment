@@ -7,8 +7,9 @@ import Home from './mainSections/home.js';
 import Playground from './mainSections/playground.js';
 import UserPositions from './mainSections/userPositions.js';
 import Notification from "./components/notification.js";
-import PriceBanner from "./components/priceBanner.js";
-
+import Explanation from "./mainSections/explanation.js";
+import AboutThisProject from "./mainSections/aboutThisProject.js";
+import Sidebar from './components/sidebar.js'; 
 
 const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
 const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
@@ -23,6 +24,25 @@ export default function HomePage() {
 
   const playgroundRef = useRef();
   const userPositionRef = useRef();
+
+  const [currentPage, setCurrentPage] = useState("explanation"); 
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case "explanation":
+        return <Explanation />;
+      case "playground":
+        return <Playground userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={playgroundRef} latestPrice={latestPrice} />
+          ;
+      case "user-positions":
+        return <UserPositions userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={userPositionRef} latestPrice={latestPrice} />
+          ;
+      case "about-this-project":
+        return <AboutThisProject />;
+      default:
+        return <Explanation />;
+    }
+  };
 
   const { address, isConnected } = useAccount({
     onConnect() {
@@ -143,10 +163,10 @@ export default function HomePage() {
     <div>
       <Navbar balanceToken0={balanceToken0} balanceToken1={balanceToken1} />
       <Home />
-      <PriceBanner price={latestPrice}/>
-      <Playground userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={playgroundRef} latestPrice={latestPrice}/>
-      <UserPositions userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={userPositionRef} latestPrice={latestPrice}/>
-
+      <div className="flex flex-row h-screen items-stretch">
+        <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} data-aos="fade-up"/>
+        <div data-aos="fade-up" className="pt-8 pb-8">{renderPage()}</div>
+      </div>
       <div className="notifications">
         {notifications.map((notification) => (
           <Notification

@@ -6,6 +6,9 @@ import { Jersey_15 } from 'next/font/google';
 
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 import { createConfig, http } from '@wagmi/core'
 import { sepolia, anvil } from 'viem/chains'
@@ -33,6 +36,17 @@ const config = createConfig({
 })
 
 export default function RootLayout({ children }) {
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      AOS.init({
+        duration: 1000, // 動畫持續時間
+        delay: 100,
+        // once: true, // 是否只觸發一次
+      });
+    }
+  }, []);
+
   return (
     <html lang="en">
       <body className={jersey.className}>

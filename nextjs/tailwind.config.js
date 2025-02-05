@@ -15,7 +15,10 @@ export default {
       backgroundImage: {
         'wallpaper3': "url('/bg-photo3.jpeg')",
         'projectIcon': "url('/projectIcon.jpeg')",
-      }
+      },
+      fontFamily: {
+        arial: ['Arial', 'sans-serif'], // Add the Arial font
+      },
     },
   },
   plugins: [],

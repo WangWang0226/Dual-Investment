@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline"; 
+import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 import { useBalance, useReadContract, useSimulateContract } from "wagmi";
 import { formatUnits } from "ethers";
 import FAUCET_ABI from '../abi/faucetAbi.js';
 import VAULT_ABI from '../abi/vaultAbi.js';
 import ERC20_ABI from '../abi/ERC20Abi.js';
-import DualInvestmentDiagram from '../components/dualInvestmentDiagram.js';
 import { setOraclePrice } from '../api.js';
 import ReturnInfoCard from '../components/returnInfoCard.js';
+import PriceBanner from "../components/priceBanner.js";
+
 
 const FAUCET_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_CONTRACT_ADDRESS;
 const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
@@ -52,7 +53,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
         functionName: "approve",
         args: [
             VAULT_ADDRESS,
-            cashAmount ? BigInt(cashAmount * 10 ** 6) : BigInt(0), 
+            cashAmount ? BigInt(cashAmount * 10 ** 6) : BigInt(0),
         ],
     });
 
@@ -62,7 +63,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
         console.log("input cashAmount: ", event.target.value)
     };
 
-    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0; 
+    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0;
 
     const handleDeposit = async () => {
 
@@ -96,7 +97,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
         abi: FAUCET_ABI,
         functionName: "tokenClaimed",
         args: [userAddr],
-        enabled: Boolean(userAddr), 
+        enabled: Boolean(userAddr),
     });
 
     const { data: allowanceData, refetch: refetchAllowance } = useReadContract({
@@ -175,77 +176,80 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
 
     return (
         <div className='playground-container'>
-            <div className='playground-left-container'>
-                {isConnected ? (
-                    <div className='flex flex-col gap-8 w-3/4 content-primary'>
-                        <div className='flex flex-col'>
-                            <h1 className='text-xl'> Step 1: Claim your USDL to play</h1>
-                            <button
-                                className='playground-button'
-                                disabled={!Boolean(claimTokenData?.request) || isClaimed}
-                                onClick={() => writeContract(claimTokenData.request)}
-                            >
-                                {isClaimed ? "Claimed Successfully!" : "Claim Your USDL"}
-                            </button>
-                        </div>
+            <PriceBanner price={latestPrice} />
+            <div className='playground-sub-container '>
+                <div className='playground-sub-left-container'>
+                    <div className='invest-container'>
 
-                        <div className='flex flex-col'>
-                            <h1 className='text-xl'> Step 2: Input your amount and choose duration</h1>
-                            <div className='input-container'>
-                                <div className='flex flex-row justify-center items-center'>
-                                    <img src='/USDL.jpeg' className="token-icon" />
-                                    <input
-                                        className='input-field'
-                                        type="number"
-                                        value={cashAmount}
-                                        onChange={handleInputChange}
-                                        placeholder="Investment Amount"
-                                    />
-                                    <span className='token-name'>USDL</span>
+
+                        {isConnected ? (
+                            <div className='flex flex-col gap-8 w-3/4 content-primary'>
+                                <div className='flex flex-col'>
+                                    <h1 className='text-xl'> Step 1: Claim your USDL to play</h1>
+                                    <button
+                                        className='playground-button'
+                                        disabled={!Boolean(claimTokenData?.request) || isClaimed}
+                                        onClick={() => writeContract(claimTokenData.request)}
+                                    >
+                                        {isClaimed ? "Claimed Successfully!" : "Claim Your USDL"}
+                                    </button>
                                 </div>
-                                <div className="tabs-container">
-                                    {depositDurations.map((duration) => (
-                                        <button
-                                            key={duration.label}
-                                            onClick={() => setSelectedDuration(duration.label)}
-                                            className={`tab ${selectedDuration === duration.label ? "active" : ""}`}
-                                        >
-                                            {duration.label}
-                                        </button>
-                                    ))}
+
+                                <div className='flex flex-col'>
+                                    <h1 className='text-xl'> Step 2: Input your amount and choose duration</h1>
+                                    <div className='input-container '>
+                                        <div className='flex flex-row justify-center items-center '>
+                                            <img src='/USDL.jpeg' className="token-icon" />
+                                            <input
+                                                className='input-field'
+                                                type="number"
+                                                value={cashAmount}
+                                                onChange={handleInputChange}
+                                                placeholder="0.0"
+                                            />
+                                            <span className='token-name'>USDL</span>
+                                        </div>
+                                        <div className="tabs-container">
+                                            {depositDurations.map((duration) => (
+                                                <button
+                                                    key={duration.label}
+                                                    onClick={() => setSelectedDuration(duration.label)}
+                                                    className={`tab ${selectedDuration === duration.label ? "active" : ""}`}
+                                                >
+                                                    {duration.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className='flex flex-col'>
+                                    <h1 className='text-xl'> Step 3: Approve & Deposit</h1>
+                                    <button
+                                        className='playground-button'
+                                        disabled={!isAmountValid} // 新增驗證條件
+                                        onClick={async () => {
+                                            if (allowanceEnough) {
+                                                await handleDeposit();
+                                            } else {
+                                                writeContract(approveDepositData.request);
+                                            }
+                                        }}
+                                    >
+                                        {allowanceEnough ? "Invest" : "Approve"}
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className='flex flex-col'>
-                            <h1 className='text-xl'> Step 3: Approve & Deposit</h1>
-                            <button
-                                className='playground-button'
-                                disabled={!isAmountValid} // 新增驗證條件
-                                onClick={ async () => {
-                                    if (allowanceEnough) {
-                                        await handleDeposit();
-                                    } else {
-                                        writeContract(approveDepositData.request);
-                                    }
-                                }}
-                            >
-                                {allowanceEnough ? "Invest" : "Approve"}
-                            </button>
-                        </div>
+                        ) : (
+                            <div className='text-4xl font-bold'> Please connect your wallet</div>
+                        )
+                        }
                     </div>
-                ) : (
-                    <div className='text-4xl font-bold'> Please connect your wallet</div>
-                )
-                }
-            </div>
+                </div>
 
 
-            <div className='playground-right-container'>
-                <div className='flex flex-row justify-center items-center gap-4'>
-                    <div className='flex flex-2 flex-col'>
-                        <ReturnInfoCard strikePrice={latestPrice} inputCashAmount={cashAmount} />
-                    </div>
+                <div className='playground-sub-right-container'>
+                    <ReturnInfoCard strikePrice={latestPrice} inputCashAmount={cashAmount} />
                     <div className='flex-1'>
                         <h1 className='text-3xl'>Information</h1>
                         <div className='vaultStatusContainer flex-1'>
@@ -275,8 +279,9 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                         </div>
                     </div>
                 </div>
-                <DualInvestmentDiagram />
             </div>
+
+
         </div>
     )
 })
