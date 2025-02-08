@@ -6,11 +6,13 @@ import { DocumentDuplicateIcon, CheckIcon } from "@heroicons/react/24/outline";
 export default function Explanation() {
     const TOKEN0_ADDRESS = process.env.NEXT_PUBLIC_TOKEN0_ADDRESS
     const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
+    const VAULT_ADDRESS = process.env.NEXT_PUBLIC_VAULT_ADDRESS
     const [copied, setCopied] = useState(null);
 
     const addresses = {
         USDL: TOKEN1_ADDRESS,
         PUPU: TOKEN0_ADDRESS,
+        Vault: VAULT_ADDRESS
     };
 
     const handleCopy = (address, key) => {
@@ -37,7 +39,7 @@ export default function Explanation() {
                     Step 4. Wait for maturity <br />
                     Step 5. Redeem your position!
                 </h2>
-                <h2 className='h1 pt-4'> Token Addresses </h2>
+                <h2 className='h1 pt-4'> Token Addresses (on Sepolia)</h2>
                 {Object.entries(addresses).map(([key, address]) => (
                     <div key={key} className="flex items-center">
                         <span className="text-2xl">{key} : {truncateAddress(address)}</span>

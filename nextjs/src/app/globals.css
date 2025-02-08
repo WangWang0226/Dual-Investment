@@ -33,7 +33,6 @@ body {
   font-family: 'Jersey 15';
 }
 
-/* 移除上下箭頭 */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -42,7 +41,6 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .background {
   position: absolute;
-  /* 确保背景图片在文字后面 */
   background-attachment: fixed;
   top: 0;
   left: 0;
@@ -50,7 +48,6 @@ input[type="number"]::-webkit-outer-spin-button {
   height: 100%;
   background-size: cover;
   filter: blur(2px);
-  /* 调整模糊程度 */
   z-index: -1;
   transition: filter 0.7s ease;
 }
@@ -61,7 +58,7 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: center;
   position: absolute;
   background: rgb(44, 44, 44);
-  opacity: 60%;
+  opacity: 50%;
   top: 0;
   left: 0;
   width: 100%;
@@ -76,7 +73,6 @@ input[type="number"]::-webkit-outer-spin-button {
   /* px-6 py-3 */
   border-radius: 96px;
   transition: background-color 0.3s;
-  /* 添加过渡效果 */
 }
 
 .button-wallet:hover {
@@ -104,7 +100,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .h1 {
   font-size: 36px;
   text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-  /* 增加黑色陰影 */
 }
 
 .h2 {
@@ -114,7 +109,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .title-primary {
   font-size: 64px;
   text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-  /* 增加黑色陰影 */
 }
 
 .input-container {
@@ -136,7 +130,6 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 28px;
   outline: none;
   min-width: 0;
-  /* 防止 input 超出容器寬度 */
 }
 
 .input-field::placeholder {
@@ -145,7 +138,6 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .playground-button {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-  /* 增加黑色陰影 */
   display: block;
   width: 100%;
   padding: 12px;
@@ -191,24 +183,20 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .navbarSubContainer {
   display: flex;
-  /* 使用 Flexbox */
-  justify-content: flex-end;
-  /* 将子元素推到右侧 */
+  justify-content: flex-end; /* Push child elements to the right */
   align-items: center;
   margin-right: 4rem;
   flex: 1;
   gap: 2rem;
 }
 
-/* 基本样式 */
 .navbar {
   position: fixed;
-  /* 固定在顶部 */
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: linear-gradient(30deg, #4cb0f7, var(--secondary));
+  background: linear-gradient(30deg, var(--lightBlue), #4563a6);
 }
 
 .vaultStatusContainer {
@@ -240,7 +228,6 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: #86d9ff;
   color: #ffffff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-  /* 增加黑色陰影 */
 }
 
 .notifications {
@@ -273,8 +260,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .close-btn {
-  margin-left: auto;
-  /* 將按鈕推到右側 */
+  margin-left: auto; /* Push button to the right */
   background: none;
   border: none;
   color: white;
@@ -402,10 +388,8 @@ input[type="number"]::-webkit-outer-spin-button {
   width: 100%;
   align-items: flex-start;
   justify-content: center;
-  flex-wrap: wrap;
-  /* 允許子元素換行 */
+  flex-wrap: wrap; /* Allow child elements wrap (line break) */
   justify-content: space-between;
-  /* 讓子元素保持間距 */
   padding: 24px 0px;
 }
 
@@ -413,9 +397,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .playground-sub-right-container,
 .explanation-sub-container {
   flex: 1 1 45%;
-  /* 每個區塊默認佔 45% 寬度 */
   box-sizing: border-box;
-  /* 確保 padding 不影響寬度計算 */
 }
 
 .playground-sub-left-container {
@@ -426,7 +408,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .invest-container {
   display: flex;
-  background: linear-gradient(180deg, #3983b9, var(--secondary));
+  background: #4563a6;
   border-radius: 12px;
   justify-content: center;
   align-items: center;
@@ -476,12 +458,13 @@ input[type="number"]::-webkit-outer-spin-button {
   gap: 32px;
   margin-top: 1rem;
   padding: 24px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4)); /* 陰影應用在外層 */
+
 }
 
 .position-card {
   position: relative;
   background: linear-gradient(135deg, #1F2937, #2C3E50);
-  /* 從淡灰到深藍 */
   color: #ffffff;
   border-radius: 8px;
   padding: 16px;
@@ -594,7 +577,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-bottom: 16px;
   position: relative;
   padding-left: 20px;
-  /* 為垂直線留出空間 */
 }
 
 .return-info-condition .label {
@@ -627,12 +609,10 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .return-info-condition.green::before {
   background-color: #4ade80;
-  /* 綠色 */
 }
 
 .return-info-condition.red::before {
   background-color: #f87171;
-  /* 紅色 */
 }
 
 .explanation-container {
@@ -644,7 +624,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0 auto;
   padding-right: 48px;
   flex-wrap: wrap;
-  /* 允許子元素換行 */
 }
 
 .explanation-sub-container {
@@ -702,4 +681,12 @@ input[type="number"]::-webkit-outer-spin-button {
 .render-page-container {
   background: var(--deepBlue);
   width: 75%;
+}
+
+.link-primary {
+  font-size: 20px;
+}
+
+.link-primary:hover {
+  color: var(--lightBrown);
 }

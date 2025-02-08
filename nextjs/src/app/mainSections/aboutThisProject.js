@@ -15,7 +15,7 @@ export default function AboutThisProject() {
                 - Testing & Deployment: Vercel for frontend and backend deployment, Postman for API testing.
             </h2>
             <h1 className="h1 mt-8"> Github Repo: <br />
-                <a target="_blank" href="https://github.com/WangWang0226/Dual-Investment/tree/master" className="content-primary"> https://github.com/WangWang0226/Dual-Investment/tree/master</a>
+                <a target="_blank" href="https://github.com/WangWang0226/Dual-Investment/tree/master" className="link-primary"> https://github.com/WangWang0226/Dual-Investment/tree/master</a>
             </h1>
         </div>
     );

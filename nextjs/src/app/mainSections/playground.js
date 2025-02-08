@@ -18,7 +18,7 @@ const TOKEN1_ADDRESS = process.env.NEXT_PUBLIC_TOKEN1_ADDRESS
 const VAULT_ADDRESS = process.env.NEXT_PUBLIC_VAULT_ADDRESS
 const INTEREST_RATE = Number(process.env.NEXT_PUBLIC_INTEREST_RATE) * 100
 
-export default forwardRef(function Playground({ userAddr, isConnected, writeContract, lastestResult, latestPrice }, ref) {
+export default forwardRef(function Playground({ userAddr, isConnected, writeContract, lastestResult, latestPrice, usdlBalance }, ref) {
     const [vaultBalanceToken0, setVaultBalanceToken0] = useState("0");
     const [vaultBalanceToken1, setVaultBalanceToken1] = useState("0");
     const [cashAmount, setCashAmount] = useState("");
@@ -61,7 +61,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
         console.log("input cashAmount: ", event.target.value)
     };
 
-    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0;
+    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0 && cashAmount <= usdlBalance;
 
     const handleDeposit = async () => {
 
@@ -180,7 +180,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                                 </div>
 
                                 <div className='flex flex-col'>
-                                    <h1 className='text-xl'> Step 2: Input your amount and choose duration</h1>
+                                    <h1 className='text-xl'> Step 2: Input amount and choose duration</h1>
                                     <div className='input-container '>
                                         <div className='flex flex-row justify-center items-center '>
                                             <img src='/USDL.jpeg' className="token-icon" />
@@ -239,7 +239,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                         <div className='vaultStatusContainer flex-1'>
 
                             <h1 className='text-2xl'> Interest Rate: {INTEREST_RATE}%</h1>
-                            <h1 className='text-2xl'>Pool Balances:</h1>
+                            <h1 className='text-2xl'>Current Vault Balances:</h1>
                             <p className='text-xl'> - PUPU: {vaultBalanceToken0}
                                 <br /> - USDL: {vaultBalanceToken1}
                             </p>

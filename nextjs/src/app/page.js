@@ -32,7 +32,7 @@ export default function HomePage() {
       case "explanation":
         return <Explanation />;
       case "playground":
-        return <Playground userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={playgroundRef} latestPrice={latestPrice} />
+        return <Playground userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={playgroundRef} latestPrice={latestPrice} usdlBalance={balanceToken1}/>
           ;
       case "user-positions":
         return <UserPositions userAddr={address} isConnected={isConnected} writeContract={writeContract} lastestResult={lastResult} ref={userPositionRef} latestPrice={latestPrice} />
