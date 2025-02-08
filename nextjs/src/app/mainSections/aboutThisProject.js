@@ -11,12 +11,11 @@ export default function AboutThisProject() {
             <h2 className="content-primary">
                 - Frontend: Next.js, Tailwind CSS, Wagmi, RainbowKit, Viem. <br />
                 - Backend: Express.js. <br />
-                - Blochchain: Solidity, Foundry, Anvil. <br />
+                - Blockchain: Solidity, Foundry, Anvil. <br />
                 - Testing & Deployment: Vercel for frontend and backend deployment, Postman for API testing.
             </h2>
             <h1 className="h1 mt-8"> Github Repo: <br />
                 <a target="_blank" href="https://github.com/WangWang0226/Dual-Investment/tree/master" className="content-primary"> https://github.com/WangWang0226/Dual-Investment/tree/master</a>
-
             </h1>
         </div>
     );
