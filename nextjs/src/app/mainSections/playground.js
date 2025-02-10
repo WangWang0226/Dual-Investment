@@ -58,10 +58,9 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
     // Handle user input change
     const handleInputChange = (event) => {
         setCashAmount(event.target.value);
-        console.log("input cashAmount: ", event.target.value)
     };
 
-    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0;
+    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0 && parseFloat(cashAmount) <= usdlBalance;
 
     const handleDeposit = async () => {
 
@@ -208,7 +207,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
                                 </div>
 
                                 <div className='flex flex-col'>
-                                    <h1 className='text-xl'> Step 3: Approve & Deposit</h1>
+                                    <h1 className='text-xl'> Step 3: Approve & Invest</h1>
                                     <button
                                         className='playground-button'
                                         disabled={!isAmountValid} // 新增驗證條件
