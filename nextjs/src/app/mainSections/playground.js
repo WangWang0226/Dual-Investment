@@ -61,7 +61,7 @@ export default forwardRef(function Playground({ userAddr, isConnected, writeCont
         console.log("input cashAmount: ", event.target.value)
     };
 
-    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0 && cashAmount <= usdlBalance;
+    const isAmountValid = cashAmount && parseFloat(cashAmount) > 0;
 
     const handleDeposit = async () => {
 
