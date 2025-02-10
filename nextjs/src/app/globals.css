@@ -3,9 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #083d65;
+  --background-primary: #212e47;
+  --background-secondary: #324769;
   --foreground: #171717;
-  --primary: #fbbf24;
+  --button-primary: #61cdd1;
+  --button-primary-hover: #4cbbbf;
   --secondary: #3965a2;
   --deepBlue: #38538d;
   --lightBlue: #629ae9;
@@ -22,14 +24,14 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: var(--deepBlue);
+    --background: var(--background-primary);
     --foreground: #ededed;
   }
 }
 
 body {
   color: white;
-  background: var(--deepBlue);
+  background: var(--background-primary);
   font-family: 'Jersey 15';
 }
 
@@ -66,18 +68,16 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .button-wallet {
-  background-color: var(--lightBlue);
+  background-color: var(--button-primary);
   color: white;
-  /* text-white */
   padding: 0.5rem 1rem;
-  /* px-6 py-3 */
   border-radius: 96px;
   transition: background-color 0.3s;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .button-wallet:hover {
-  background-color: #4a87db;
-  /* hover:bg-yellow-600 */
+  background-color: var(--button-primary-hover);
 }
 
 .token-icon {
@@ -115,7 +115,8 @@ input[type="number"]::-webkit-outer-spin-button {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background-color: var(--lightBlue);
+  background-color: #7592ba4d;
+
   padding: 16px 24px;
   border-radius: 12px;
   color: #ccc;
@@ -144,7 +145,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 20px;
   text-align: center;
   color: white;
-  background: linear-gradient(90deg, #4cb0f7, #2ed7b3);
+  background: var(--button-primary);
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -196,12 +197,13 @@ input[type="number"]::-webkit-outer-spin-button {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: linear-gradient(30deg, var(--lightBlue), #4563a6);
+  background: #263852;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .vaultStatusContainer {
   border-radius: 12px;
-  border: 2px solid var(--lightBlue);
+  border: 4px solid var(--background-secondary);
   width: 100%;
   padding: 24px;
 }
@@ -219,13 +221,12 @@ input[type="number"]::-webkit-outer-spin-button {
   border: none;
   cursor: pointer;
   font-size: 20px;
-  background-color: var(--lightBlue);
-  color: var(--lightGray);
+  color: white;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .tab.active {
-  background-color: #86d9ff;
+  background: var(--button-primary);
   color: #ffffff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
@@ -408,7 +409,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .invest-container {
   display: flex;
-  background: #4563a6;
+  background: var(--background-secondary);
   border-radius: 12px;
   justify-content: center;
   align-items: center;
@@ -554,7 +555,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .return-info-card {
-  background-color: #1f2937;
+  background-color: var(--background-secondary);
   border-radius: 12px;
   padding: 12px 24px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -640,7 +641,7 @@ input[type="number"]::-webkit-outer-spin-button {
   height: 100%;
   color: white;
   padding-top: 24px;
-  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
+  background: var(--background-primary);
 }
 
 .sidebar ul {
@@ -653,33 +654,31 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: color 0.3s;
   background: linear-gradient(90deg, #4c6aac, var(--deepBlue));
   padding: 4px 12px;
-  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
+  background: var(--background-primary);
 }
 
 .sidebar li:hover {
-  color: #00bcd4;
+  color: #aed6f6;
   cursor: pointer;
-  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar li.active {
-  background: linear-gradient(90deg, #5b79ba, var(--deepBlue));
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  color: #00bcd4;
+  color: var(--button-primary);
 }
 
 .main-container {
   display: flex;
   flex-direction: row;
   height: 100vh;
-  background: var(--deepBlue);
+  background: var(--background-primary);
 }
 
 .render-page-container {
-  background: var(--deepBlue);
+  background: var(--background-primary);
   width: 75%;
 }
 
@@ -688,5 +687,5 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .link-primary:hover {
-  color: var(--lightBrown);
+  color: var(--button-primary);
 }
