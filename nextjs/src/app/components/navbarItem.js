@@ -1,6 +1,6 @@
 const NavbarItem = ({ icon, tokenName, balance}) => {
     return (
-        <p className='flex flex-row content-primary'>
+        <p className='navbar-item'>
             <img src={icon} className="token-icon" />
             {tokenName}: {balance}
         </p>
